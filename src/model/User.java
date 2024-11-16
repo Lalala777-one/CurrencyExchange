@@ -15,7 +15,7 @@ public class User {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.role = Role.USER;
+        this.role = Role.GUEST;
     }
 
     @Override

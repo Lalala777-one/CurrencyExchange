@@ -62,6 +62,13 @@ public class AccountRepo {
     }
 
     // Обновление аккаунта
+
+
+    /*
+    это у нас счет юзера
+    updateAccount должен поддерживать актуальную информации о балансе и состоянии счета
+     */
+
     public void updateAccount(Account account) {
         List<Account> accounts = mapAccounts.get(account.getUserId());
 

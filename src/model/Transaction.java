@@ -34,7 +34,7 @@ public class Transaction {
         this.toAmount = toAmount;
         this.exchangeRate = exchangeRate;
         this.timeOperation = LocalDateTime.now();
-    }
 
+    }
 
 }
