@@ -24,28 +24,28 @@ public class UserRepo {
     }
 
     // Поиск пользователя по ID
+    //todo
     public User findUserById(int userId) {
-        return users.get(userId);
+        return null;
     }
 
     // Получить все счета пользователя
+    //todo
     public List<Account> findAccountsByUserId(int userId) {
-        return accounts.values().stream()
-                .filter(account -> account.getUserId() == userId)
-                .collect(Collectors.toList());
+        return null;
     }
 
     // Все транзакции пользователя по ID пользователя (как отправителя и получателя)
+    // todo
     public List<Transaction> findTransactionsByUserId(int userId) {
-        return transactions.values().stream()
-                .filter(transaction -> transaction.getFromUserId() == userId || transaction.getToUserId() == userId)
-                .collect(Collectors.toList());
+        return null;
     }
 
 
     // Добавление счета
+    // todo
     public void addAccount(Account account) {
-        accounts.put(account.getId(), account);
+
     }
 
     // Добавление транзакции
