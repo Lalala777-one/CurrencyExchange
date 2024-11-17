@@ -79,6 +79,7 @@ while (true){
 
    // МЕНЮ ДЛЯ ЗАРЕГИСТРИРОВАННОГО ПОЛЬЗОВАТЕЛЯ
     private void showUserMenu(){
+        if (activeUser.getRole() == Role.USER)
         while (true){
             System.out.println(Color.YELLOW + "Добро пожаловать в главное меню пользователя" + Color.RESET);
             System.out.println("1. Посмотреть курс валют");
@@ -157,6 +158,7 @@ while (true){
 
 // МЕНЮ АДМИНИСТРАТОРА
     private void showAdminMenu(){
+        if (activeUser.getRole() == Role.ADMIN)
     while (true) {
         System.out.println(Color.YELLOW + "Добро пожаловать в меню администратора" + Color.RESET);
         System.out.println("1. Просмотр списка пользователей");

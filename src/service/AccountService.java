@@ -10,18 +10,18 @@ public interface AccountService { //  управление аккаунтами 
     void createAccount(int userId, String currencyCode, double initialBalance);
 
     // Получить аккаунт пользователя по ID счета
-    Account getAccountById(String accountId);
+    Account getAccountById(int accountId);
 
     // Получить все счета пользователя
     List<Account> getAllAccountsForUser(int userId);
 
     // Проверить баланс на аккаунте
-    double checkBalance(int userId, String accountId);
+    double checkBalance(int userId, int accountId);
 
     // Перевести деньги с одного счета на другой
-    void transferMoney(int userId, String fromAccountId, String toAccountId, double amount);
+    void transferMoney(int userId, int fromAccountId, int toAccountId, double amount); // может поменять  fromAccountId на стринг
 
     // Закрыть счет пользователя
-    void closeAccount(int userId, String accountId);
+    void closeAccount(int userId, int accountId);
 
 }
