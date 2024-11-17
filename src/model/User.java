@@ -11,11 +11,16 @@ public class User {
     // private List<Account> accounts; получвть из репозитория
     private Role role;
 
+    public User(){
+        this.role = Role.GUEST;
+    }
+
     public User(int id, String email, String password) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.role = Role.GUEST;
+        this.role = Role.USER;
+
     }
 
     @Override

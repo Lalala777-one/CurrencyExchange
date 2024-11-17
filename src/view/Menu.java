@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Menu {
 
     private final Scanner scanner = new Scanner(System.in);
-    private User activeUser;
+    private User activeUser = new User();
     private UserService userService;
     private CurrencyService currencyService;
     private AccountService accountService;
@@ -34,22 +34,27 @@ public class Menu {
         this.transactionService = transactionService;
     }
 
+    public void run(){
+        showGuestMenu();
+    }
+
     // МЕНЮ ДЛЯ НЕ ЗАРЕГИСТРИРОВАННОГО ПОЛЬЗОВАТЕЛЯ
 private void showGuestMenu(){
-    if (activeUser.getRole() == Role.GUEST)
-while (true){
-    System.out.println(Color.YELLOW + "Добро пожаловать!\n" +
-            "Для доступа ко всем функциям, пожалуйста, создайте учетную запись или войдите в существующую." + Color.RESET);
-    System.out.println("1. Войти");
-    System.out.println("2. Зарегистрироваться");
-    System.out.println("3. Посмотреть курс валют");
-    System.out.println(Color.GREEN + "\nПожалуйста, выберите пункт меню:" + Color.RESET);
+    if (activeUser.getRole() == Role.GUEST ) {
+        while (true) {
+            System.out.println(Color.YELLOW + "Добро пожаловать!\n" +
+                    "Для доступа ко всем функциям, пожалуйста, создайте учетную запись или войдите в существующую." + Color.RESET);
+            System.out.println("1. Войти");
+            System.out.println("2. Зарегистрироваться");
+            System.out.println("3. Посмотреть курс валют");
+            System.out.println(Color.GREEN + "\nПожалуйста, выберите пункт меню:" + Color.RESET);
 
-    int choice = scanner.nextInt();
-    scanner.nextLine();
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
-    showGuestSubMenu(choice);
-}
+            showGuestSubMenu(choice);
+        }
+    }
 } // showGuestMenu
 
 
@@ -79,25 +84,26 @@ while (true){
 
    // МЕНЮ ДЛЯ ЗАРЕГИСТРИРОВАННОГО ПОЛЬЗОВАТЕЛЯ
     private void showUserMenu(){
-        if (activeUser.getRole() == Role.USER)
-        while (true){
-            System.out.println(Color.YELLOW + "Добро пожаловать в главное меню пользователя" + Color.RESET);
-            System.out.println("1. Посмотреть курс валют");
-            System.out.println("2. Посмотреть баланс");
-            System.out.println("3. Открыть новый счет");
-            System.out.println("4. Пополнить счет");
-            System.out.println("5. Снять деньги со счета");
-            System.out.println("6. Закрыть счет");
-            System.out.println("7. Осуществить обмен валюты");
-            System.out.println("8. Посмотреть историю всех транзакций");
-            System.out.println("9. Logout");
+        if (activeUser.getRole() == Role.USER) {
+            while (true) {
+                System.out.println(Color.YELLOW + "Добро пожаловать в главное меню пользователя" + Color.RESET);
+                System.out.println("1. Посмотреть курс валют");
+                System.out.println("2. Посмотреть баланс");
+                System.out.println("3. Открыть новый счет");
+                System.out.println("4. Пополнить счет");
+                System.out.println("5. Снять деньги со счета");
+                System.out.println("6. Закрыть счет");
+                System.out.println("7. Осуществить обмен валюты");
+                System.out.println("8. Посмотреть историю всех транзакций");
+                System.out.println("9. Logout");
 
-            System.out.println("\nСделайте ваш выбор:");
+                System.out.println("\nСделайте ваш выбор:");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+                int choice = scanner.nextInt();
+                scanner.nextLine();
 
-            showUserSubMenu(choice);
+                showUserSubMenu(choice);
+            }
         }
     } // showUserMenu
 
@@ -158,20 +164,21 @@ while (true){
 
 // МЕНЮ АДМИНИСТРАТОРА
     private void showAdminMenu(){
-        if (activeUser.getRole() == Role.ADMIN)
-    while (true) {
-        System.out.println(Color.YELLOW + "Добро пожаловать в меню администратора" + Color.RESET);
-        System.out.println("1. Просмотр списка пользователей");
-        System.out.println("2. Просмотр доступных валют");
-        System.out.println("3. Добавление новой валюты");
-        System.out.println("4. Удаление валюты");
-        System.out.println("\nСделайте ваш выбор:");
+        if (activeUser.getRole() == Role.ADMIN) {
+            while (true) {
+                System.out.println(Color.YELLOW + "Добро пожаловать в меню администратора" + Color.RESET);
+                System.out.println("1. Просмотр списка пользователей");
+                System.out.println("2. Просмотр доступных валют");
+                System.out.println("3. Добавление новой валюты");
+                System.out.println("4. Удаление валюты");
+                System.out.println("\nСделайте ваш выбор:");
 
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+                int choice = scanner.nextInt();
+                scanner.nextLine();
 
-        showAdminSubMenu(choice);
-    }
+                showAdminSubMenu(choice);
+            }
+        }
     }
 
     private void showAdminSubMenu(int choice) {
