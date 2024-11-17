@@ -1,21 +1,49 @@
 package view;
 
+import model.Role;
+import model.User;
+import service.AccountService;
+import service.CurrencyService;
+import service.TransactionService;
+import service.UserService;
+
 import java.util.Scanner;
 
 public class Menu {
 
     private final Scanner scanner = new Scanner(System.in);
+    private User activeUser;
+    private UserService userService;
+    private CurrencyService currencyService;
+    private AccountService accountService;
+    private TransactionService transactionService;
 
+    //todo
+  //   private ExchangeRateService exchangeRateService;
+
+// конструктор для сервисов
+
+
+    public Menu( UserService userService,
+                CurrencyService currencyService,
+                AccountService accountService,
+                TransactionService transactionService) {
+        this.userService = userService;
+        this.currencyService = currencyService;
+        this.accountService = accountService;
+        this.transactionService = transactionService;
+    }
 
     // МЕНЮ ДЛЯ НЕ ЗАРЕГИСТРИРОВАННОГО ПОЛЬЗОВАТЕЛЯ
 private void showGuestMenu(){
+    if (activeUser.getRole() == Role.GUEST)
 while (true){
-    System.out.println(Color.YELLOW + "Welcome!\n" +
-            "To access all features, please create an account or log in to an existing one." + Color.RESET);
-    System.out.println("1. Log In");
-    System.out.println("2. Sign Up");
-    System.out.println("3. View Exchange Rates");
-    System.out.println(Color.GREEN + "\nPlease enter a menu option:" + Color.RESET);
+    System.out.println(Color.YELLOW + "Добро пожаловать!\n" +
+            "Для доступа ко всем функциям, пожалуйста, создайте учетную запись или войдите в существующую." + Color.RESET);
+    System.out.println("1. Войти");
+    System.out.println("2. Зарегистрироваться");
+    System.out.println("3. Посмотреть курс валют");
+    System.out.println(Color.GREEN + "\nПожалуйста, выберите пункт меню:" + Color.RESET);
 
     int choice = scanner.nextInt();
     scanner.nextLine();
@@ -30,17 +58,17 @@ while (true){
     switch (choice){
         case 1:
             // Todo
-            // метод
+            //login();
             waitRead();
             break;
         case 2:
             // Todo
-            // метод
+            //register();
             waitRead();
             break;
         case  3:
             // Todo
-            // метод
+            // showCurrencyRates();
             waitRead();
             break;
         default:
@@ -50,7 +78,6 @@ while (true){
 
 
    // МЕНЮ ДЛЯ ЗАРЕГИСТРИРОВАННОГО ПОЛЬЗОВАТЕЛЯ
-
     private void showUserMenu(){
         while (true){
             System.out.println(Color.YELLOW + "Добро пожаловать в главное меню пользователя" + Color.RESET);
@@ -77,47 +104,47 @@ while (true){
    switch (choice){
        case 1:
            // Todo
-           // method
+           // showCurrencyRates();
            waitRead();
            break;
        case 2:
            // Todo
-           // method
+           //showBalance();
            waitRead();
            break;
        case 3:
            // Todo
-           // method
+           // openAccount();
            waitRead();
            break;
        case 4:
            // Todo
-           // method
+           // depositMoney(); пополнить счет
            waitRead();
            break;
        case 5:
            // Todo
-           // method
+           //  withdrawMoney(); снять со счета
            waitRead();
            break;
        case 6:
            // Todo
-           // method
+           // closeAccount(); закрыть счет
            waitRead();
            break;
        case 7:
            // Todo
-           // method
+           // exchangeCurrency(); обменять валюту
            waitRead();
            break;
        case 8:
            // Todo
-           // method
+           // showTransactionHistory();
            waitRead();
            break;
        case 9:
            // Todo
-           // method
+           // logout();
            waitRead();
            break;
        default:
