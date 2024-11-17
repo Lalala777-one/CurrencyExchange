@@ -10,7 +10,7 @@ public interface UserService {
 
 
     // Регистрация нового пользователя
-    void registerUser(String email, String password);
+    boolean registerUser(String email, String password);
 
     // Поиск пользователя по ID
     User findUserById(int userId);

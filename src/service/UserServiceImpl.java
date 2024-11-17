@@ -6,9 +6,10 @@ import model.User;
 import java.util.List;
 
 public class UserServiceImpl implements UserService{
-    @Override
-    public void registerUser(String email, String password) {
 
+    @Override
+    public boolean registerUser(String email, String password) {
+        return false;
     }
 
     @Override

@@ -13,16 +13,17 @@ public class Menu {
 
     private final Scanner scanner = new Scanner(System.in);
     private User activeUser = new User();
+   // private User registeredUser;
     private UserService userService;
     private CurrencyService currencyService;
     private AccountService accountService;
     private TransactionService transactionService;
 
-    //todo
+
+   //todo
   //   private ExchangeRateService exchangeRateService;
 
-// конструктор для сервисов
-
+// конструктор, принимает "сервисы"
 
     public Menu( UserService userService,
                 CurrencyService currencyService,
@@ -77,7 +78,7 @@ private void showGuestMenu(){
             waitRead();
             break;
         default:
-            System.out.println(Color.GREEN + "Please make a valid choice\n" + Color.RESET);
+            System.out.println(Color.GREEN + "Сделайте корректный выбор\n" + Color.RESET);
     }
     }//
 
