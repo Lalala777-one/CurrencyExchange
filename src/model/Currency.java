@@ -11,10 +11,7 @@ public class Currency {
 
     private String name;
     private String code;
-    // todo
-   // private double exchangeRate; // Курс валюты относительно базовой валюты (например, к евро)
 
-    // добавить exchangeRate в конструктор
     Currency(String name, String code ) {
         this.name = name;
         this.code = code;
