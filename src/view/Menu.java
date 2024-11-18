@@ -188,11 +188,17 @@ private void showGuestMenu(){
             // Todo
             // method
             /*
-             // Получаем список всех пользователей
-        List<User> users = userService.showAllUsers();
+
+      /* Метод показать всех юзеров
+
+        List<User> users = userRepo.showAllUsers();
         System.out.println(Color.BLUE + "\t\t\t\033[1mСписок всех пользователей\033[0m" + Color.RESET);
-        users.forEach(System.out::println); // Печатаем каждого пользователя
-             */
+        System.out.printf( "%-10s%-20s%-30s%n", "Id", "Имя", "email");
+        System.out.println(Color.BLUE + "__________________________________________________" + Color.RESET);
+        for (User user : users) {
+            System.out.println(user);
+        }
+        */
             waitRead();
             break;
         case 2:
