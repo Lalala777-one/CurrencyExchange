@@ -15,7 +15,6 @@ public class UserRepoImpl implements UserRepo{
     private Map<Integer, Transaction> transactions = new HashMap<>(); // Ключ — это уникальный идентификатор транзакции (transaction.getId()).
     // Значение — это сам объект Transaction, который содержит данные о транзакции
 
-
     // Добавляем нового пользователя
     public void addUser(User user) {
         users.put(user.getId(), user);
