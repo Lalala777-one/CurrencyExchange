@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TransactionRepoImpl implements TransactionRepo {
-    Map<Long, Transaction> transactions = new HashMap<>();
-    Long id = 0L;
+    Map<Integer, Transaction> transactions = new HashMap<>();
+    int id = 0;
 
     @Override
     public void saveTransaction(Transaction transaction) {
@@ -15,17 +15,17 @@ public class TransactionRepoImpl implements TransactionRepo {
     }
 
     @Override
-    public void deleteTransaction(Long id, Transaction transaction) {
+    public void deleteTransaction(int id, Transaction transaction) {
         transactions.remove(id, transaction);
     }
 
     @Override
-    public Transaction findTransactionById(Long id) {
+    public Transaction findTransactionById(int id) {
         return transactions.get(id);
     }
 
     @Override
-    public Map<Long, Transaction> findAllTransactions() {
+    public Map<Integer, Transaction> findAllTransactions() {
         return transactions;
     }
 }
