@@ -12,29 +12,29 @@ public class EmailAndPasswordValidator {
     public static void isValidEmail(String email) throws EmailValidateException {
         // 1. Должна присутствовать @ и только ОДНА
 
-        String initStr = "Email must meet the following requirements: ";
+        String initStr = "Электронная почта должна соответствовать следующим требованиям: ";
         StringBuilder errorMessage = new StringBuilder(initStr);
 
         // 1. Должна присутствовать @
         int indexAt = email.indexOf('@');
         // int lastAt = email.lastIndexOf('@');
         if (indexAt == -1 || indexAt != email.lastIndexOf('@')) {
-            errorMessage.append("\n\t\t- must contain exactly one '@' symbol. ");
+            errorMessage.append("\n\t\t- должна содержать ровно один символ '@'. ");
         }
 
 
         // 2. Точка после собаки
         int dotIndexAfterAt = email.indexOf('.', indexAt + 1);
         if (dotIndexAfterAt == -1) {
-            errorMessage.append("\n\t\t- must have a '.' character after the '@' symbol. ");
+            errorMessage.append("\n\t\t- должна содержать символ '.' после символа '@'. ");
         }
 
         // 3. После последней точки есть 2 или более символов
         // test@fazx.com.ne.t
         int lastDotIndex = email.lastIndexOf('.');
         if (lastDotIndex + 2 >= email.length()) {
-            errorMessage.append("\n\t\t- the part after the last '.'" +
-                    " in the email address must be at least two characters long. ");
+            errorMessage.append("\n\t\t- часть после последней точки " +
+                    "в адресе электронной почты должна содержать как минимум два символа. ");
         }
 
 // 4.  Алфавит, цифры, '-', '_', '.', '@'
@@ -55,7 +55,8 @@ public class EmailAndPasswordValidator {
 
             // Если любой символ НЕ подходящий, сразу возвращаем false
             if (!isPass) {
-                errorMessage.append("\n\t\t- can only contain letters, digits, '-', '_', '.', and '@'. No other characters are allowed.");
+                errorMessage.append("\n\t\t- может содержать только буквы, цифры," +
+                        " '-', '_', '.', и '@'. Другие символы не допускаются.");
             }
         }
 
@@ -63,7 +64,7 @@ public class EmailAndPasswordValidator {
         // Если 0-й символ НЕ является буквой, то email не подходит = return false;
         char firstChar = email.charAt(0);
         if (!Character.isAlphabetic(firstChar)) {
-            errorMessage.append("\n\t\t- the first symbol should be alphabetic");
+            errorMessage.append("\n\t\t- первый символ должен быть буквенным");
         }
 
         // Все проверки пройдены. email подходит.
@@ -80,7 +81,7 @@ public class EmailAndPasswordValidator {
     public static void isValidPassword(String password) throws PasswordValidateException {
         if (password == null || password.length() < 8) {
             System.out.println();
-            throw new PasswordValidateException("\"Password must be at least 8 characters long.\"");
+            throw new PasswordValidateException("\"Пароль должен содержать не менее 8 символов.\"");
         }
 
         boolean isDigit = false; // наличие хотя бы одной цифры
@@ -107,23 +108,23 @@ public class EmailAndPasswordValidator {
         }
 
         // если будет несколько ошибок, в консоли отображаем все сразу, чтобы было понятно что требуется исправить
-        StringBuilder errorMessage = new StringBuilder("Password must contain at least: ");
+        StringBuilder errorMessage = new StringBuilder("Пароль должен содержать хотя бы: ");
         boolean valid = true;
 
         if (!isDigit) {
-            errorMessage.append("\n\t\t- one digit. ");
+            errorMessage.append("\n\t\t- одну цифру. ");
             valid = false;
         }
         if (!isLowercase) {
-            errorMessage.append("\n\t\t- one lowercase letter. ");
+            errorMessage.append("\n\t\t- одну строчную букву. ");
             valid = false;
         }
         if (!isUppercase) {
-            errorMessage.append("\n\t\t- one uppercase letter. ");
+            errorMessage.append("\n\t\t- одну заглавную букву. ");
             valid = false;
         }
         if (!isSpecialChar) {
-            errorMessage.append("\n\t\t- one special character. ");
+            errorMessage.append("\n\t\t- один специальный символ. ");
             valid = false;
         }
 
