@@ -1,4 +1,4 @@
-package exceptions;
+package exceptionsUtils;
 
 public class AccountException extends Exception{
 

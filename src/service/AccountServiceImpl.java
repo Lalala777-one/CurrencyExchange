@@ -25,10 +25,16 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public void transferMoney(int userId, int fromAccountId, int toAccountId, double amount) {
+    public void closeAccount(int userId, int accountId) {
     }
 
     @Override
-    public void closeAccount(int userId, int accountId) {
+    public void deposit(int accountId, double amount) {
+
+    }
+
+    @Override
+    public void withdraw(Long accountId, double amount) {
+
     }
 }
