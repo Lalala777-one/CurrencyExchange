@@ -1,4 +1,4 @@
-package exceptions;
+package exceptionsUtils;
 
 public class PasswordValidateException extends Exception {
 
