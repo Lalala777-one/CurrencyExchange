@@ -1,4 +1,4 @@
-package emailPasswordValidator.validator;
+package exceptions;
 
 public class PasswordValidateException extends Exception {
 
