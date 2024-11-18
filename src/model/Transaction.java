@@ -1,9 +1,10 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Transaction {
-
+    private static final AtomicInteger transactionIdGenerator = new AtomicInteger(1);
     private final int transactionId;
 
     private final Account fromAccount;
@@ -26,7 +27,7 @@ public class Transaction {
                        double toAmount,
                        double exchangeRate) {
 
-        this.transactionId = transactionId;
+        this.transactionId = transactionIdGenerator.getAndIncrement();;
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.fromCurrency = fromCurrency;
