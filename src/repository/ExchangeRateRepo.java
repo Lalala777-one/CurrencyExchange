@@ -6,9 +6,9 @@ import model.ExchangeRate;
 import java.util.Map;
 
 public interface ExchangeRateRepo {
-    void addExchangeRate(String fromCurrency, String toCurrency, double rate);
-    void updateExchangeRate(String fromCurrency, String toCurrency, double rate);
-    double getExchangeRate(String fromCurrency, String toCurrency);
-    void removeExchangeRate(String fromCurrency, String toCurrency);
+    void addExchangeRate(Currency fromCurrency, Currency toCurrency, double rate);
+    void updateExchangeRate(Currency fromCurrency, Currency toCurrency, double rate);
+    double getExchangeRate(Currency fromCurrency, Currency toCurrency);
+    void removeExchangeRate(Currency fromCurrency, Currency toCurrency);
     Map<Currency, ExchangeRate> getAllExchangeMap();
 }

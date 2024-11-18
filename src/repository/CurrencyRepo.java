@@ -2,8 +2,10 @@ package repository;
 
 import model.Currency;
 
+import java.util.List;
+
 public interface CurrencyRepo {
-    Currency findCurrencyByCode(String code);
-    void saveCurrency(Currency currency);
-    void deleteCurrency(Currency currency);
+    void addCurrency(Currency currency);
+    Currency getCurrencyByCode(String currencyCode);
+    List<Currency> getAllCurrencies();
 }

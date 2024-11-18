@@ -24,14 +24,12 @@ public class UserRepoImpl implements UserRepo{
     }
 
     // Поиск пользователя по ID
-    //todo
     public User findUserById(int userId) {
-        return null;
+        return users.get(userId);
     }
 
-    // todo
     public User deleteUser(int userId){
-        return null;
+        return users.remove(userId);
     } // – удаление пользователя
 
 

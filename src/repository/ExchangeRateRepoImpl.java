@@ -11,27 +11,31 @@ public class ExchangeRateRepoImpl implements ExchangeRateRepo {
     private Map<Currency, ExchangeRate> exchangeRateMap = new LinkedHashMap<>();
 
     @Override
-    public void addExchangeRate(String fromCurrency, String toCurrency, double rate) {
-
+    public void addExchangeRate(Currency fromCurrency, Currency toCurrency, double rate) {
+        ExchangeRate exchangeRate = new ExchangeRate(rate, fromCurrency, toCurrency);
+        exchangeRateMap.put(fromCurrency, exchangeRate);
     }
 
     @Override
-    public void updateExchangeRate(String fromCurrency, String toCurrency, double rate) {
-
+    public void updateExchangeRate(Currency fromCurrency, Currency toCurrency, double rate) {
+        ExchangeRate exchangeRate = new ExchangeRate(rate, fromCurrency, toCurrency);
+        exchangeRateMap.put(fromCurrency, exchangeRate);
     }
 
     @Override
-    public double getExchangeRate(String fromCurrency, String toCurrency) {
-        return 0;
+    public double getExchangeRate(Currency fromCurrency, Currency toCurrency) {
+        ExchangeRate exchangeRate = exchangeRateMap.get(fromCurrency);
+        return exchangeRate.getRate();
     }
 
     @Override
-    public void removeExchangeRate(String fromCurrency, String toCurrency) {
-
+    public void removeExchangeRate(Currency fromCurrency, Currency toCurrency) {
+        ExchangeRate exchangeRate = exchangeRateMap.get(fromCurrency);
+        exchangeRateMap.remove(fromCurrency);
     }
 
     @Override
     public Map<Currency, ExchangeRate> getAllExchangeMap() {
-        return Map.of();
+        return new LinkedHashMap<>(exchangeRateMap);
     }
 }

@@ -30,8 +30,6 @@ public class AccountRepoImpl implements AccountRepo {
     @Override
     public void deleteAccount(int userId, int accountId) {
         List<Account> accounts = mapAccounts.get(userId);
-        if (accounts != null) {
-            accounts.removeIf(account -> account.getId() == accountId);
-        }
+        accounts.removeIf(account -> account.getId() == accountId);
     }
 }
