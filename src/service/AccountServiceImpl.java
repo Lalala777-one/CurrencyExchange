@@ -7,7 +7,6 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService{
     @Override
     public void createAccount(int userId, String currencyCode, double initialBalance) {
-
     }
 
     @Override
@@ -27,11 +26,9 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public void transferMoney(int userId, int fromAccountId, int toAccountId, double amount) {
-
     }
 
     @Override
     public void closeAccount(int userId, int accountId) {
-
     }
 }
