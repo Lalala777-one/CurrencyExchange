@@ -31,7 +31,7 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountException("Валюта с кодом " + currencyCode + " не существует.");
         }
 
-        Account newAccount = new Account(0, currency, userId);
+        Account newAccount = new Account(currency, userId);
         accountRepo.addAccount(newAccount);
     }
 
@@ -54,8 +54,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public double checkBalance(int userId, int accountId) throws AccountException {
         Account account = getAccountById(accountId);  // Проверяем, существует ли аккаунт
-        if (account.getUserId() != userId) {
-            throw new AccountException("Аккаунт не принадлежит данному пользователю.");
+        if (account == null || account.getUserId() != userId) {
+            throw new AccountException("Аккаунт либо не существует, либо не принадлежит данному пользователю.");
         }
         return account.getBalance();
     }
@@ -77,6 +77,10 @@ public class AccountServiceImpl implements AccountService {
         }
 
         Account account = getAccountById(accountId);
+        if (account == null) { // Проверяем, что аккаунт существует
+            throw new AccountException("Аккаунт с таким ID не найден.");
+        }
+
         account.setBalance(account.getBalance() + amount);
     }
 
@@ -87,6 +91,10 @@ public class AccountServiceImpl implements AccountService {
         }
 
         Account account = getAccountById(accountId);
+        if (account == null) { // Проверяем, что аккаунт существует
+            throw new AccountException("Аккаунт с таким ID не найден.");
+        }
+
         if (account.getBalance() < amount) {
             throw new AccountException("Недостаточно средств на счете.");
         }
