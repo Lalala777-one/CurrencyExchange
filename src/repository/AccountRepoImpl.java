@@ -28,14 +28,6 @@ public class AccountRepoImpl implements AccountRepo {
     }
 
     @Override
-    public void updateAccount(Account account) {
-        List<Account> accounts = mapAccounts.get(account.getUserId());
-        if (accounts != null) {
-            accounts.replaceAll(existingAccount -> existingAccount.getId() == account.getId() ? account : existingAccount);
-        }
-    }
-
-    @Override
     public void deleteAccount(int userId, int accountId) {
         List<Account> accounts = mapAccounts.get(userId);
         if (accounts != null) {
