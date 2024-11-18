@@ -17,6 +17,11 @@ public class Currency {
         this.code = code;
     }
 
+    // todo проверить вывод
+    @Override
+    public String toString() {
+        return String.format("Валюта: %12s Код: %6s", name, code);
+    }
 
     public String getName() {
         return name;

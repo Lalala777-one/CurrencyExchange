@@ -43,12 +43,12 @@ public class Menu {
 private void showGuestMenu(){
     if (activeUser.getRole() == Role.GUEST ) {
         while (true) {
-            System.out.println(Color.YELLOW + "Добро пожаловать!\n" +
-                    "Для доступа ко всем функциям, пожалуйста, создайте учетную запись или войдите в существующую." + Color.RESET);
+            System.out.println(Color.YELLOW + "\033[1mДобро пожаловать!\n\033[0m" + Color.YELLOW +
+                    "Для доступа ко всем функциям, пожалуйста, создайте учетную запись или войдите в существующую.\n" + Color.RESET);
             System.out.println("1. Войти");
             System.out.println("2. Зарегистрироваться");
             System.out.println("3. Посмотреть курс валют");
-            System.out.println(Color.GREEN + "\nПожалуйста, выберите пункт меню:" + Color.RESET);
+            System.out.println(Color.GREEN + "\n\033[1m\033[3mПожалуйста, выберите пункт меню:\033[0m");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -78,7 +78,7 @@ private void showGuestMenu(){
             waitRead();
             break;
         default:
-            System.out.println(Color.GREEN + "Сделайте корректный выбор\n" + Color.RESET);
+            System.out.println(Color.GREEN + "\033[3mСделайте корректный выбор\\033[0m\n");
     }
     }//
 
@@ -87,7 +87,7 @@ private void showGuestMenu(){
     private void showUserMenu(){
         if (activeUser.getRole() == Role.USER) {
             while (true) {
-                System.out.println(Color.YELLOW + "Добро пожаловать в главное меню пользователя" + Color.RESET);
+                System.out.println(Color.YELLOW + "\033[1mДобро пожаловать в главное меню пользователя\033[0m");
                 System.out.println("1. Посмотреть курс валют");
                 System.out.println("2. Посмотреть баланс");
                 System.out.println("3. Открыть новый счет");
@@ -98,7 +98,7 @@ private void showGuestMenu(){
                 System.out.println("8. Посмотреть историю всех транзакций");
                 System.out.println("9. Logout");
 
-                System.out.println("\nСделайте ваш выбор:");
+                System.out.println(Color.GREEN + "\n\033[3mСделайте ваш выбор:\033[0m");
 
                 int choice = scanner.nextInt();
                 scanner.nextLine();
@@ -156,7 +156,7 @@ private void showGuestMenu(){
            waitRead();
            break;
        default:
-           System.out.println(Color.GREEN + "Сделайте корректный выбор\n" + Color.RESET);
+           System.out.println(Color.GREEN + "\033[3mСделайте корректный выбор\033[0m\n");
 
    }
     } // showUserSubMenu
@@ -167,12 +167,12 @@ private void showGuestMenu(){
     private void showAdminMenu(){
         if (activeUser.getRole() == Role.ADMIN) {
             while (true) {
-                System.out.println(Color.YELLOW + "Добро пожаловать в меню администратора" + Color.RESET);
+                System.out.println(Color.YELLOW + "\033[1mДобро пожаловать в меню администратора\\033[0m");
                 System.out.println("1. Просмотр списка пользователей");
                 System.out.println("2. Просмотр доступных валют");
                 System.out.println("3. Добавление новой валюты");
                 System.out.println("4. Удаление валюты");
-                System.out.println("\nСделайте ваш выбор:");
+                System.out.println(Color.GREEN + "\n\033[3mСделайте ваш выбор:\033[0m");
 
                 int choice = scanner.nextInt();
                 scanner.nextLine();
@@ -187,6 +187,12 @@ private void showGuestMenu(){
         case 1:
             // Todo
             // method
+            /*
+             // Получаем список всех пользователей
+        List<User> users = userService.showAllUsers();
+        System.out.println(Color.BLUE + "\t\t\t\033[1mСписок всех пользователей\033[0m" + Color.RESET);
+        users.forEach(System.out::println); // Печатаем каждого пользователя
+             */
             waitRead();
             break;
         case 2:
@@ -209,7 +215,7 @@ private void showGuestMenu(){
 
 
     private void waitRead() {
-        System.out.println("\nPress Enter to continue");
+        System.out.println(Color.CYAN + "\nНажмите Enter для продолжения" + Color.RESET);
         scanner.nextLine();
     }
 

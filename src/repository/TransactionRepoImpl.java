@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TransactionRepoImpl implements TransactionRepo {
-    Map<Integer, Transaction> transactions = new HashMap<>();
+    Map<Integer, Transaction> transactions = new HashMap<>(); // Integer по счету
 
     @Override
     public void saveTransaction(Transaction transaction) {
@@ -21,10 +21,10 @@ public class TransactionRepoImpl implements TransactionRepo {
     @Override
     public Transaction findTransactionById(int id) {
         return transactions.get(id);
-    }
+    } //
 
     @Override
     public Map<Integer, Transaction> findAllTransactions() {
         return transactions;
-    }
+    } // находить транзакции по счетам
 }

@@ -5,8 +5,9 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class User {
-    private static final AtomicInteger userIdGenerator = new AtomicInteger(1);
+    private static int userIdCounter = 0;
     private int id;
+    private String name;
     private String email;
     private String password;
     // private List<Account> accounts; получвть из репозитория
@@ -16,20 +17,18 @@ public class User {
         this.role = Role.GUEST;
     }
 
-    public User(int id, String email, String password) {
-        this.id = userIdGenerator.getAndIncrement();
+    public User( String email, String password, String name) {
+        this.id = ++userIdCounter; // Увеличиваем счётчик для нового пользователя
         this.email = email;
         this.password = password;
+        this.name = name;
         this.role = Role.USER;
 
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "email = '" + email + '\'' +
-                ", id = " + id +
-                '}';
+        return String.format("id: %-5d имя: %-11s email: %-25s", id, name, email);
     }
 
     public int getId() {
@@ -63,6 +62,14 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
