@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface TransactionRepo {
     void saveTransaction(Transaction transaction);
-    void deleteTransaction(int id, Transaction transaction);
+    void deleteTransaction(int id);
     Transaction findTransactionById(int id);
     Map<Integer, Transaction> findAllTransactions();
 }

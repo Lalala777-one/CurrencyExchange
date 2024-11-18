@@ -7,16 +7,15 @@ import java.util.Map;
 
 public class TransactionRepoImpl implements TransactionRepo {
     Map<Integer, Transaction> transactions = new HashMap<>();
-    int id = 0;
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        transactions.put(++id, transaction);
+        transactions.put(transaction.getTransactionId(), transaction);
     }
 
     @Override
-    public void deleteTransaction(int id, Transaction transaction) {
-        transactions.remove(id, transaction);
+    public void deleteTransaction(int id) {
+        transactions.remove(id);
     }
 
     @Override
