@@ -1,0 +1,8 @@
+
+
+InsufficientFundsException – недостаточно средств на счете
+CurrencyNotFoundException – валюта не найдена
+AccountNotFoundException – счет не найден
+UserNotFoundException – пользователь не найден
+InvalidExchangeRateException – неверный курс обмена
+UserBlockedException – если пользователь заблокирован, операции не могут быть выполнены.
