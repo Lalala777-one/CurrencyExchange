@@ -1,5 +1,7 @@
 package model;
 
+import view.Color;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,7 +30,8 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("id: %-5d имя: %-11s email: %-25s", id, name, email);
+        return String.format("%-10d%-20s%-30s", id, name, email);
+
     }
 
     public int getId() {
