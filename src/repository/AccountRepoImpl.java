@@ -6,7 +6,7 @@ import java.util.*;
 
 public class AccountRepoImpl implements AccountRepo {
 
-    private final Map<Integer, List<Account>> mapAccounts = new HashMap<>();
+    private final Map<Integer, List<Account>> mapAccounts = new HashMap<>();// Integer - userid
 
     @Override
     public void addAccount(Account account) {

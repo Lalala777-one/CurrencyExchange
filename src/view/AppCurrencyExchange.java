@@ -15,7 +15,7 @@ public class AppCurrencyExchange {
         TransactionRepo transactionRepo = new TransactionRepoImpl();
         UserRepo userRepo = new UserRepoImpl();
 
-        AccountService accountService = new AccountServiceImpl();
+        AccountService accountService = new AccountServiceImpl(accountRepo);
         CurrencyService currencyService = new CurrencyServiceImpl();
         TransactionService transactionService = new TransactionServiceImpl();
         UserService userService = new UserServiceImpl();
