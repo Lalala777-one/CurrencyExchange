@@ -11,3 +11,9 @@ public interface CurrencyService {  // управление курсами ва�
     // Обновить курс валюты (доступно только админу)
     void updateExchangeRate(String fromCurrencyCode, String toCurrencyCode, double newRate);
 }
+/*
+addCurrency(Currency currency) – добавление новой валюты
+getCurrencyByCode(String currencyCode) – получение валюты по коду
+getAllCurrencies() – получение всех валют
+
+ */

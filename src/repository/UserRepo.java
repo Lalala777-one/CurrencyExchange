@@ -29,29 +29,10 @@ public class UserRepo {
         return null;
     }
 
-    // Получить все счета пользователя
-    //todo
-    public List<Account> findAccountsByUserId(int userId) {
-        return null;
-    }
-
-    // Все транзакции пользователя по ID пользователя (как отправителя и получателя)
     // todo
-    public List<Transaction> findTransactionsByUserId(int userId) {
+    private User deleteUser(int userId){
         return null;
-    }
-
-
-    // Добавление счета
-    // todo
-    public void addAccount(Account account) {
-
-    }
-
-    // Добавление транзакции
-    public void addTransaction(Transaction transaction) {
-        transactions.put(transaction.getTransactionId(), transaction);
-    }
+    } // – удаление пользователя
 
 
 }

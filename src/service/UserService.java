@@ -21,13 +21,6 @@ public interface UserService {
     // Получение списка всех пользователей
     List<User> getAllUsers();
 
-    // Добавить счет пользователю
-    void addAccountToUser(int userId, Account account);
 
-    // Получить все счета пользователя
-    List<Account> getAccountsByUserId(int userId);
-
-    // Удалить счет пользователя
-    void removeAccountFromUser(int userId, int accountId);
 }
 
