@@ -27,18 +27,5 @@ public class UserServiceImpl implements UserService{
         return List.of();
     }
 
-    @Override
-    public void addAccountToUser(int userId, Account account) {
 
-    }
-
-    @Override
-    public List<Account> getAccountsByUserId(int userId) {
-        return List.of();
-    }
-
-    @Override
-    public void removeAccountFromUser(int userId, int accountId) {
-
-    }
 }

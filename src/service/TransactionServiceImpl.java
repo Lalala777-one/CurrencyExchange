@@ -11,14 +11,16 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
+    public void exchangeTransaction(int userId, int fromAccountId, int toAccountId, double amount) {
+
+    }
+
+    @Override
     public List<Transaction> findTransactionsByUserId(int userId) {
         return List.of();
     }
 
-    @Override
-    public void exchangeCurrency(int userId, int fromAccountId, int toAccountId, double amount) {
 
-    }
 
     @Override
     public void deposit(int userId, int accountId, double amount) {

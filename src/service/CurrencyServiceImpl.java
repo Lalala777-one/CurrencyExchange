@@ -1,18 +1,24 @@
 package service;
 
+import model.Currency;
+
+import java.util.List;
+
 public class CurrencyServiceImpl implements CurrencyService{
+
+
     @Override
-    public double getExchangeRate(String fromCurrencyCode, String toCurrencyCode) {
-        return 0;
+    public void addCurrency(Currency currency) {
+
     }
 
     @Override
-    public double convertCurrency(String fromCurrencyCode, String toCurrencyCode, double amount) {
-        return 0;
+    public Currency getCurrencyByCode(String currencyCode) {
+        return null;
     }
 
     @Override
-    public void updateExchangeRate(String fromCurrencyCode, String toCurrencyCode, double newRate) {
-
+    public List<Currency> getAllCurrencies() {
+        return List.of();
     }
 }
