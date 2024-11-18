@@ -12,8 +12,7 @@ public interface CurrencyService {  // управление курсами ва�
 
     List<Currency> getAllCurrencies(); //– получение всех валют
 
-    // Конвертировать из одной валюты в другую  ??
-    double convertCurrency(String fromCurrencyCode, String toCurrencyCode, double amount);
+
 
 
 }
