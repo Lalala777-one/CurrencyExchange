@@ -9,7 +9,7 @@ public interface AccountService { //  управление аккаунтами 
     // Создать новый счет для пользователя
     void createAccount(int userId, String currencyCode, double initialBalance);
 
-    // Получить аккаунт пользователя по ID счета
+    // Получить счет пользователя по ID счета
     Account getAccountById(int accountId);
 
     // Получить все счета пользователя
