@@ -18,8 +18,7 @@ public class Transaction {
     private final double exchangeRate;
     private final LocalDateTime timeOperation;
 
-    public Transaction(int transactionId,
-                       Account fromAccount,
+    public Transaction(Account fromAccount,
                        Account toAccount,
                        Currency fromCurrency,
                        Currency toCurrency,
