@@ -1,5 +1,8 @@
 package emailPasswordValidator.validator;
 
+import exceptions.EmailValidateException;
+import exceptions.PasswordValidateException;
+
 public class ValidateApp {
     public static void main(String[] args) {
 
