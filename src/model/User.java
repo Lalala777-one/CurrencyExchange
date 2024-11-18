@@ -2,9 +2,10 @@ package model;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class User {
-
+    private static final AtomicInteger userIdGenerator = new AtomicInteger(1);
     private int id;
     private String email;
     private String password;
@@ -16,7 +17,7 @@ public class User {
     }
 
     public User(int id, String email, String password) {
-        this.id = id;
+        this.id = userIdGenerator.getAndIncrement();
         this.email = email;
         this.password = password;
         this.role = Role.USER;
