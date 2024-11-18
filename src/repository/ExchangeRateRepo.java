@@ -1,23 +1,11 @@
 package repository;
 
-import model.Currency;
-import model.ExchangeRate;
-
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-
-public class ExchangeRateRepo {
-
-   private Map<Currency, ExchangeRate> exchangeRateMap = new LinkedHashMap<>();
-
-   // добавить значения ExchangeRate
-
-   /*
-   saveExchangeRate(ExchangeRate rate) – сохранение курса валют
-getExchangeRate(Currency sourceCurrency, Currency targetCurrency) – получение курса валюты
-updateExchangeRate(ExchangeRate rate) – обновление курса валюты
-    */
-
-
+public interface ExchangeRateRepo {
+    void addExchangeRate(String fromCurrency, String toCurrency, double rate);
+    void updateExchangeRate(String fromCurrency, String toCurrency, double rate);
+    double getExchangeRate(String fromCurrency, String toCurrency);
+    void removeExchangeRate(String fromCurrency, String toCurrency);
+    Map<String, Double> getAllExchangeRatesForCurrency(String currency);
 }

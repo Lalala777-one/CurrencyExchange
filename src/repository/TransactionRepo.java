@@ -1,12 +1,12 @@
 package repository;
 
 import model.Transaction;
-import model.User;
 
-import java.util.List;
 import java.util.Map;
 
-public class TransactionRepo {
-
-    // private Map<User, List<Transaction>> userListMap
+public interface TransactionRepo {
+    void saveTransaction(Transaction transaction);
+    void deleteTransaction(Long id, Transaction transaction);
+    Transaction findTransactionById(Long id);
+    Map<Long, Transaction> findAllTransactions();
 }
