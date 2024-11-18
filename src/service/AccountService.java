@@ -18,11 +18,8 @@ public interface AccountService { //  управление аккаунтами 
     // Проверить баланс на аккаунте
     double checkBalance(int userId, int accountId);
 
-    // Перевести деньги с одного счета на другой
-    void transferMoney(int userId, int fromAccountId, int toAccountId, double amount); // может поменять  fromAccountId на стринг
-
-   // deposit(int accountId, double amount) – пополнение счета
-   //withdraw(Long accountId, double amount) – снятие средств со счета
+   void deposit(int accountId, double amount); // – пополнение счета
+   void withdraw(Long accountId, double amount); // – снятие средств со счета
 
     // Закрыть счет пользователя
     void closeAccount(int userId, int accountId);
