@@ -1,6 +1,6 @@
 package model;
 
-public class Currency {
+public enum Currency {
 
     // todo
 
@@ -8,6 +8,13 @@ public class Currency {
     // тогда в ExchangeRate надо добавить с какой и в какую валюту?
    // private Currency fromCurrency;  // Исходная валюта
    // private Currency toCurrency;
+
+    EUR("Euro", "EUR"),
+    USD("US Dollar", "USD"),
+    SEK("Swedish Krona", "SEK"),
+    GBP("British Pound", "GBP"),
+    JPY("Japanese Yen", "JPY"),
+    CHF("Swiss Franc", "CHF");
 
     private String name;
     private String code;
@@ -29,6 +36,15 @@ public class Currency {
 
     public String getCode() {
         return code;
+    }
+
+    public static Currency findByCode(String code) {
+        for (Currency currency : values()) {
+            if (currency.getCode().equals(code)) {
+                return currency;
+            }
+        }
+        throw new IllegalArgumentException("Unknown currency code: " + code);
     }
 
     /*
