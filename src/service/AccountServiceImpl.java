@@ -5,16 +5,19 @@ import model.Account;
 import model.Currency;
 import repository.AccountRepo;
 import repository.CurrencyRepo;
+import repository.UserRepo;
 
 import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
     private final AccountRepo accountRepo;
     private final CurrencyRepo currencyRepo;
+    private final UserRepo userRepo;
 
-    public AccountServiceImpl(AccountRepo repositoryAccount, CurrencyRepo currencyRepo) {
+    public AccountServiceImpl(AccountRepo repositoryAccount, CurrencyRepo currencyRepo, UserRepo userRepo) {
         this.accountRepo = repositoryAccount;
         this.currencyRepo = currencyRepo;
+        this.userRepo = userRepo;
     }
 
 
@@ -46,8 +49,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> getAllAccountsByUserId(int userId) {
-        // Возвращаем все аккаунты пользователя
+    public List<Account> getAllAccountsByUserId(int userId) throws AccountException{
+        if (userRepo.findUserById(userId) == null) {
+            throw new AccountException("Пользователь с ID " + userId + " не существует.");
+        }
+
         return accountRepo.getAccountsByUserId(userId);
     }
 

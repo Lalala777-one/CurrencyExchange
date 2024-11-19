@@ -14,7 +14,7 @@ public interface AccountService { //  управление аккаунтами 
     Account getAccountById(int accountId) throws AccountException;
 
     // Получить все счета пользователя
-    List<Account> getAllAccountsByUserId(int userId);
+    List<Account> getAllAccountsByUserId(int userId) throws AccountException;
 
     // Проверить баланс на аккаунте
     double checkBalance(int userId, int accountId) throws AccountException;
