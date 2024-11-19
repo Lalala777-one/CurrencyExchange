@@ -12,7 +12,7 @@ public class Currency {
     private String name;
     private String code;
 
-    Currency(String name, String code ) {
+    public Currency(String name, String code) {
         this.name = name;
         this.code = code;
     }
@@ -30,14 +30,4 @@ public class Currency {
     public String getCode() {
         return code;
     }
-
-    /*
-    public double getExchangeRate() {
-        return exchangeRate;
-    }
-
-    public void setExchangeRate(double exchangeRate) {
-        this.exchangeRate = exchangeRate;
-    }
-     */
 }
