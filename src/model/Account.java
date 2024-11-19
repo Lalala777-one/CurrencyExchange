@@ -31,6 +31,10 @@ public class Account {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public double getBalance() {
         return balance;
     }
@@ -42,4 +46,5 @@ public class Account {
     public int getUserId() {
         return userId;
     }
+
 }

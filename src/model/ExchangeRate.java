@@ -8,6 +8,8 @@ public class ExchangeRate {
     private LocalDateTime date;
     private Currency fromCurrency;  // Исходная валюта
     private Currency toCurrency; //  // Валюта-цель
+    private String fromC;
+    private String toC; //  // Валюта-цель
 
 
     public ExchangeRate(double rate, Currency fromCurrency, Currency toCurrency) {
@@ -16,6 +18,13 @@ public class ExchangeRate {
         this.toCurrency = toCurrency;
         this.date = LocalDateTime.now();
     }
+    // new
+    public ExchangeRate(double rate, String fromC, String toC) {
+        this.rate = rate;
+        this.fromC = fromC;
+        this.toC = toC;
+        this.date = LocalDateTime.now();
+    } // new
 
     // todo проверить вывод
     @Override

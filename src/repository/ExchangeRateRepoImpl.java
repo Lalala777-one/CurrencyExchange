@@ -35,15 +35,45 @@ public class ExchangeRateRepoImpl implements ExchangeRateRepo {
     }
 
     @Override
-    public void updateExchangeRate(Currency fromCurrency, Currency toCurrency, double rate) {
-        ExchangeRate exchangeRate = new ExchangeRate(rate, fromCurrency, toCurrency);
-        exchangeRateMap.put(fromCurrency, exchangeRate);
+    public double getExchangeRate(Currency fromCurrency, Currency toCurrency) {
+        String directKey = fromCurrency.getCode() + "-" + toCurrency.getCode();
+        ExchangeRate directRate = exchangeRateMap.get(directKey);
+
+        if (directRate != null) {
+            return directRate.getRate();
+        }
+
+        String baseCurrencyCode = "EUR";
+        Currency baseCurrency = new Currency("Euro", baseCurrencyCode);
+
+        String toBaseKey = fromCurrency.getCode() + "-" + baseCurrencyCode;
+        ExchangeRate toBaseRate = exchangeRateMap.get(toBaseKey);
+
+        if (toBaseRate == null) {
+            String reverseToBaseKey = baseCurrency.getCode() + "-" + fromCurrency.getCode();
+            ExchangeRate reverseToBaseRate = exchangeRateMap.get(reverseToBaseKey);
+
+            if (reverseToBaseRate != null) {
+                toBaseRate = new ExchangeRate(1 / reverseToBaseRate.getRate(), reverseToBaseRate.getToCurrency(), reverseToBaseRate.getFromCurrency());
+            } else {
+                throw new IllegalArgumentException("Обменный курс " + fromCurrency + " к базовой валюте не найдено");
+            }
+        }
+
+        String fromBaseKey = baseCurrency.getCode() + "-" + toCurrency.getCode();
+        ExchangeRate fromBaseRate = exchangeRateMap.get(fromBaseKey);
+
+        if (fromBaseRate == null) {
+            throw new IllegalArgumentException("Курс для базовой валюты к " + toCurrency + " не найден");
+        }
+
+        return toBaseRate.getRate() * fromBaseRate.getRate();
     }
 
     @Override
-    public double getExchangeRate(Currency fromCurrency, Currency toCurrency) {
-        ExchangeRate exchangeRate = exchangeRateMap.get(fromCurrency);
-        return exchangeRate.getRate();
+    public void updateExchangeRate(Currency fromCurrency, Currency toCurrency, double rate) {
+        ExchangeRate exchangeRate = new ExchangeRate(rate, fromCurrency, toCurrency);
+        exchangeRateMap.put(fromCurrency, exchangeRate);
     }
 
     @Override
@@ -55,6 +85,23 @@ public class ExchangeRateRepoImpl implements ExchangeRateRepo {
     @Override
     public Map<Currency, ExchangeRate> getAllExchangeMap() {
         return new LinkedHashMap<>(exchangeRateMap);
+    }
+
+
+//    @Override
+//    public double getExchangeRate(Currency fromCurrency, Currency toCurrency) {
+//        String key = fromCurrency.getCode() + "-" + toCurrency.getCode();  // Створюємо ключ для пошуку
+//        ExchangeRate exchangeRate = exchangeRates.get(key);  // Шукаємо за ключем
+//        if (exchangeRate == null) {
+//            throw new IllegalArgumentException("Обменный курс " + fromCurrency + " к базовой валюте не найдено");
+//        }
+//        return exchangeRate.getRate();
+//    }
+
+
+    @Override
+    public void clear() {
+        exchangeRateMap.clear();
     }
 
 }

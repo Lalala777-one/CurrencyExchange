@@ -11,4 +11,6 @@ public interface ExchangeRateRepo {
     double getExchangeRate(Currency fromCurrency, Currency toCurrency);
     void removeExchangeRate(Currency fromCurrency, Currency toCurrency);
     Map<Currency, ExchangeRate> getAllExchangeMap();
+
+    void clear();
 }
