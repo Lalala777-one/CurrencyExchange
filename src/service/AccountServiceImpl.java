@@ -5,19 +5,16 @@ import model.Account;
 import model.Currency;
 import repository.AccountRepo;
 import repository.CurrencyRepo;
-import repository.UserRepo;
 
 import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
     private final AccountRepo accountRepo;
     private final CurrencyRepo currencyRepo;
-    private final UserRepo userRepo;
 
-    public AccountServiceImpl(AccountRepo repositoryAccount, CurrencyRepo currencyRepo, UserRepo userRepo) {
+    public AccountServiceImpl(AccountRepo repositoryAccount, CurrencyRepo currencyRepo) {
         this.accountRepo = repositoryAccount;
         this.currencyRepo = currencyRepo;
-        this.userRepo = userRepo;
     }
 
 
@@ -49,14 +46,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> getAllAccountsByUserId(int userId) throws AccountException{
-        if (userRepo.findUserById(userId) == null) {
-            throw new AccountException("Пользователь с ID " + userId + " не существует.");
-        }
-
+    public List<Account> getAllAccountsByUserId(int userId) {
+        // Возвращаем все аккаунты пользователя
         return accountRepo.getAccountsByUserId(userId);
     }
-
+git
     @Override
     public double checkBalance(int userId, int accountId) throws AccountException {
         Account account = getAccountById(accountId);  // Проверяем, существует ли аккаунт
@@ -83,9 +77,6 @@ public class AccountServiceImpl implements AccountService {
         }
 
         Account account = getAccountById(accountId);
-        if (account == null) { // Проверяем, что аккаунт существует
-            throw new AccountException("Аккаунт с таким ID не найден.");
-        }
 
         account.setBalance(account.getBalance() + amount);
     }
@@ -97,10 +88,6 @@ public class AccountServiceImpl implements AccountService {
         }
 
         Account account = getAccountById(accountId);
-        if (account == null) { // Проверяем, что аккаунт существует
-            throw new AccountException("Аккаунт с таким ID не найден.");
-        }
-
         if (account.getBalance() < amount) {
             throw new AccountException("Недостаточно средств на счете.");
         }
