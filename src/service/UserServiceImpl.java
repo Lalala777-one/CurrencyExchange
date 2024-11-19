@@ -4,10 +4,12 @@ import exceptionsUtils.EmailValidateException;
 import exceptionsUtils.PasswordValidateException;
 import exceptionsUtils.UserException;
 import model.Account;
+import model.Role;
 import model.User;
 import repository.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserServiceImpl implements UserService{
 
@@ -57,20 +59,53 @@ public class UserServiceImpl implements UserService{
         // Устанавливаем активного пользователя
         this.activeUser = user;
         // Приветственное сообщение
-        System.out.println("Добро пожаловать, " + user.getName() + "!");
         return true;
     }
 
-
+// ???
     @Override
-    public User findUserById(int userId) {
-        return null;
+    public Optional<User> findUserById(int userId) {
+        Optional<User> user = userRepo.findUserById(userId);
+
+        if (user.isPresent()) { // Проверяем, найден ли пользователь
+            return user;  // Если пользователь найден, возвращаем его
+        } else {
+            return Optional.empty();  // Если пользователь не найден, возвращаем пустой Optional
+        }
     }
 
     @Override
-    public List<User> showAllUsers() {
-        return List.of();
+    public List<User> showAllUsers () throws UserException {
+        if (activeUser == null) {
+            throw new UserException("Вы не авторизованы!");
+        }
+        // Проверяем, является ли активный пользователь администратором
+        if (activeUser.getRole() != Role.ADMIN) {
+            throw new UserException("У вас нет прав для просмотра всех пользователей.");
+        }
+        // Возвращаем всех пользователей, если это администратор
+        return userRepo.showAllUsers();
     }
+
+
+    @Override
+    public boolean logOutUser() {
+            if (activeUser == null) {
+                System.out.println("Вы не авторизированны");
+                return false;
+            } else {
+                System.out.println("Выход из системы");
+                activeUser = null;
+            }
+            return true;
+        }
+
+
+    // Метод для получения активного пользователя
+    public User getActiveUser() {
+        return activeUser;
+    }
+
 
     public static void isValidEmail(String email) throws EmailValidateException {
         // 1. Должна присутствовать @ и только ОДНА

@@ -1,14 +1,19 @@
 package repository;
 
 import model.Account;
+import model.Role;
 import model.Transaction;
 import model.User;
+import view.Color;
 
 import java.util.*;
 
 public class UserRepoImpl implements UserRepo{
 
     private Map<Integer, User> users = new HashMap<>();
+
+
+
 
     public UserRepoImpl() {
         addUsers(newUsers); // Добавляем пользователей в репозиторий
@@ -19,6 +24,9 @@ public class UserRepoImpl implements UserRepo{
             new User("testemail2@gmail.com", "Asdfghjk123!", "Ben"),
             new User("testemail3@gmail.com", "Yxcvbnnm!23", "Tomas")
     );
+
+
+
 
     public void addUsers(List<User> userList){
         for (User user : userList){
@@ -55,27 +63,31 @@ public class UserRepoImpl implements UserRepo{
     }
 
     // Метод для получения пользователя по email
+
     public User getUserEmail(String email) {
-        // Ищем пользователя по email
-        for (User user : users.values()) {
-            if (user.getEmail().equals(email)) {
-                return user; // Если нашли, возвращаем пользователя
-            }
-        }
-        return null; // Если не нашли, возвращаем null
+    return users.values().stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);  // Возвращаем null, если пользователь не найден
+}
+
+    // Добавляем нового пользователя с ролью ADMIN
+    public void addAdminUser(String email, String password, String name) {
+        User user = new User(email, password, name);  // Создаем пользователя без роли
+        user.setRole(Role.ADMIN);  // Устанавливаем роль ADMIN
+        addUser(user);  // Добавляем его в репозиторий
     }
 
 
-    /*
+}
+
+
+ /*
     // Метод для проверки существования пользователя по email
     public boolean isEmailExist(String email) {
         return users.containsKey(email);
     }
      */
-
-
-}
-
 
 
 // private Map<Integer, Account> accounts = new HashMap<>(); // Ключ — это уникальный идентификатор счета (account.getId()).
