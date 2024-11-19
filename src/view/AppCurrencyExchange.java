@@ -18,11 +18,12 @@ public class AppCurrencyExchange {
     public static void main(String[] args) {
 
         AccountRepo accountRepo = new AccountRepoImpl();
+        CurrencyRepo currencyRepo = new CurrencyRepoImpl();
         ExchangeRateRepo exchangeRateRepo = new ExchangeRateRepoImpl();
         TransactionRepo transactionRepo = new TransactionRepoImpl();
         UserRepo userRepo = new UserRepoImpl();
 
-        AccountService accountService = new AccountServiceImpl();
+        AccountService accountService = new AccountServiceImpl(accountRepo, currencyRepo);
         CurrencyService currencyService = new CurrencyServiceImpl();
         TransactionService transactionService = new TransactionServiceImpl();
         UserService userService = new UserServiceImpl(userRepo);
