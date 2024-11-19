@@ -1,6 +1,9 @@
 package model;
 
-public enum Currency {
+import java.util.HashMap;
+import java.util.Map;
+
+public class Currency {
 
     // todo
 
@@ -9,13 +12,6 @@ public enum Currency {
    // private Currency fromCurrency;  // Исходная валюта
    // private Currency toCurrency;
 
-    EUR("Euro", "EUR"),
-    USD("US Dollar", "USD"),
-    SEK("Swedish Krona", "SEK"),
-    GBP("British Pound", "GBP"),
-    JPY("Japanese Yen", "JPY"),
-    CHF("Swiss Franc", "CHF");
-
     private String name;
     private String code;
 
@@ -23,6 +19,26 @@ public enum Currency {
         this.name = name;
         this.code = code;
     }
+
+    private static final Map<String, Currency> currencies = new HashMap<>();
+
+    // Створюємо валюту та додаємо її в карту
+    public static final Currency EUR = new Currency("Euro", "EUR");
+    public static final Currency USD = new Currency("US Dollar", "USD");
+    public static final Currency SEK = new Currency("Swedish Krona", "SEK");
+    public static final Currency GBP = new Currency("British Pound", "GBP");
+    public static final Currency JPY = new Currency("Japanese Yen", "JPY");
+    public static final Currency CHF = new Currency("Swiss Franc", "CHF");
+
+    static {
+        currencies.put(EUR.getCode(), EUR);
+        currencies.put(USD.getCode(), USD);
+        currencies.put(SEK.getCode(), SEK);
+        currencies.put(GBP.getCode(), GBP);
+        currencies.put(JPY.getCode(), JPY);
+        currencies.put(CHF.getCode(), CHF);
+    }
+
 
     // todo проверить вывод
     @Override
@@ -39,12 +55,11 @@ public enum Currency {
     }
 
     public static Currency findByCode(String code) {
-        for (Currency currency : values()) {
-            if (currency.getCode().equals(code)) {
-                return currency;
-            }
+        Currency currency = currencies.get(code);
+        if (currency == null) {
+            throw new IllegalArgumentException("Unknown currency code: " + code);
         }
-        throw new IllegalArgumentException("Unknown currency code: " + code);
+        return currency;
     }
 
     /*
