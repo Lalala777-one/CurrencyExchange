@@ -3,6 +3,7 @@ package service;
 public interface ExchangeRateService {
 
     // Метод для инициализации курсов валют относительно евро
+
     void initializeExchangeRates();
 
     double getExchangeRate(String fromCurrencyCode, String toCurrencyCode);

@@ -48,6 +48,32 @@ public class UserRepoImpl implements UserRepo{
         return new ArrayList<>(users.values()); // Возвращаем список всех пользователей
     }
 
+    public boolean isEmailExist(String email) {
+        // Проверяем, есть ли среди пользователей тот, у кого email совпадает
+        return users.values().stream()
+                .anyMatch(user -> user.getEmail().equals(email));
+    }
+
+    // Метод для получения пользователя по email
+    public User getUserEmail(String email) {
+        // Ищем пользователя по email
+        for (User user : users.values()) {
+            if (user.getEmail().equals(email)) {
+                return user; // Если нашли, возвращаем пользователя
+            }
+        }
+        return null; // Если не нашли, возвращаем null
+    }
+
+
+    /*
+    // Метод для проверки существования пользователя по email
+    public boolean isEmailExist(String email) {
+        return users.containsKey(email);
+    }
+     */
+
+
 }
 
 
