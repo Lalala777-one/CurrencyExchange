@@ -80,7 +80,9 @@ public class AccountServiceImpl implements AccountService{
             if (amount <= 0) {
                 throw new AccountException("Сумма депозита должна быть больше нуля.");
             }
-
+            if (accountId <= 0) {
+                throw new AccountException("Некорректный ID аккаунта. ID должен быть больше нуля.");
+            }
             Account account = getAccountById(accountId);
 
             account.setBalance(account.getBalance() + amount);
@@ -91,7 +93,9 @@ public class AccountServiceImpl implements AccountService{
             if (amount <= 0) {
                 throw new AccountException("Сумма снятия должна быть больше нуля.");
             }
-
+            if (accountId <= 0) {
+                throw new AccountException("Некорректный ID аккаунта. ID должен быть больше нуля.");
+            }
             Account account = getAccountById(accountId);
             if (account.getBalance() < amount) {
                 throw new AccountException("Недостаточно средств на счете.");
