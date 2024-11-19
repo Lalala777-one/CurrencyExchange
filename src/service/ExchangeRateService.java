@@ -1,15 +1,15 @@
 package service;
 
+import exceptionsUtils.ExchangeRateException;
+import model.Currency;
+
 public interface ExchangeRateService {
 
-    // Метод для инициализации курсов валют относительно евро
-    void initializeExchangeRates();
-
-    double getExchangeRate(String fromCurrencyCode, String toCurrencyCode);
+     double getExchangeRate(String fromCurrencyCode, String toCurrencyCode) throws ExchangeRateException.CurrencyNotFoundException, ExchangeRateException.ExchangeRateNotFoundException;
 
     // Обновить курс валюты (доступно только админу)
-    void updateExchangeRate(String fromCurrencyCode, String toCurrencyCode, double newRate);
+    void updateExchangeRate(String fromCurrencyCode, String toCurrencyCode, double newRate) throws ExchangeRateException.CurrencyNotFoundException;
 
     // Конвертировать из одной валюты в другую  ??
-    double convertCurrency(String fromCurrencyCode, String toCurrencyCode, double amount);
+    double convertCurrency(Currency fromCurrencyCode, Currency toCurrencyCode, double amount) throws ExchangeRateException;
 }
