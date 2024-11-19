@@ -1,6 +1,6 @@
 package exceptionsUtils;
 
-public class ExchangeRateException extends Exception{
+public class ExchangeRateException extends Exception {
 
     // неверный курс обмена
 
@@ -38,3 +38,4 @@ public class ExchangeRateException extends Exception{
         }
     }
  */
+

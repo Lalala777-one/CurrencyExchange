@@ -5,25 +5,27 @@ import model.Currency;
 import repository.ExchangeRateRepo;
 
 public class ExchangeRateServiceImpl implements ExchangeRateService {
+
     private static final Currency BASE_CURRENCY = new Currency("Euro", "EUR"); // Базовая валюта - евро
     private final ExchangeRateRepo exchangeRateRepo;
 
+    // Конструктор для инжекции репозитория
     public ExchangeRateServiceImpl(ExchangeRateRepo exchangeRateRepo) {
         this.exchangeRateRepo = exchangeRateRepo;
     }
 
     @Override
-    public double convertCurrency(Currency fromCurrency, Currency toCurrency, double amount)
-            throws ExchangeRateException.CurrencyNotFoundException, ExchangeRateException.ExchangeRateNotFoundException {
+    public double convertCurrency(Currency fromCurrency, Currency toCurrency, double amount) throws ExchangeRateException {
 
+        // Проверка на null для валют
         if (fromCurrency == null || toCurrency == null) {
-            throw new ExchangeRateException.CurrencyNotFoundException(fromCurrency == null ? "Unknown" : fromCurrency.getCode());
+            throw new ExchangeRateException("Обе валюты должны быть указаны.");
         }
 
-        // Проверка существования курса обмена в репозитории
+        // Проверка наличия курса обмена в репозитории
         double exchangeRate = exchangeRateRepo.getExchangeRate(fromCurrency, toCurrency);
         if (exchangeRate == 0) {
-            throw new ExchangeRateException.ExchangeRateNotFoundException(fromCurrency.getCode(), toCurrency.getCode());
+            throw new ExchangeRateException("Курс обмена для валют " + fromCurrency.getCode() + " -> " + toCurrency.getCode() + " не найден.");
         }
 
         // Если одна из валют - это базовая валюта, можно сразу конвертировать
@@ -33,41 +35,44 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
             return amount / exchangeRateRepo.getExchangeRate(toCurrency, fromCurrency);
         } else {
             // Перевести сначала в евро, а потом в целевую валюту
-            double amountInBaseCurrency = amount / exchangeRateRepo.getExchangeRate(fromCurrency, BASE_CURRENCY); // Конвертируем в евро
-            return amountInBaseCurrency * exchangeRateRepo.getExchangeRate(BASE_CURRENCY, toCurrency); // Конвертируем из евро в целевую валюту
+            double amountInBaseCurrency = amount / exchangeRateRepo.getExchangeRate(fromCurrency, BASE_CURRENCY);
+            return amountInBaseCurrency * exchangeRateRepo.getExchangeRate(BASE_CURRENCY, toCurrency);
         }
     }
 
     @Override
-    public double getExchangeRate(String fromCurrencyCode, String toCurrencyCode)
-            throws ExchangeRateException.CurrencyNotFoundException, ExchangeRateException.ExchangeRateNotFoundException {
+    public double getExchangeRate(Currency fromCurrencyCode, Currency toCurrencyCode) throws ExchangeRateException {
 
         Currency fromCurrency = new Currency("Unknown", fromCurrencyCode);
         Currency toCurrency = new Currency("Unknown", toCurrencyCode);
 
+        // Проверка на null для валют
         if (fromCurrency == null || toCurrency == null) {
-            throw new ExchangeRateException.CurrencyNotFoundException(fromCurrencyCode);
+            throw new ExchangeRateException("Обе валюты должны быть указаны.");
         }
 
+        // Получение курса
         double exchangeRate = exchangeRateRepo.getExchangeRate(fromCurrency, toCurrency);
         if (exchangeRate == 0) {
-            throw new ExchangeRateException.ExchangeRateNotFoundException(fromCurrencyCode, toCurrencyCode);
+            throw new ExchangeRateException("Курс обмена для валют " + fromCurrencyCode + " -> " + toCurrencyCode + " не найден.");
         }
 
         return exchangeRate;
     }
 
     @Override
-    public void updateExchangeRate(String fromCurrencyCode, String toCurrencyCode, double newRate)
-            throws ExchangeRateException.CurrencyNotFoundException {
+    public void updateExchangeRate(String fromCurrencyCode, String toCurrencyCode, double newRate) throws ExchangeRateException {
 
         Currency fromCurrency = new Currency("Unknown", fromCurrencyCode);
         Currency toCurrency = new Currency("Unknown", toCurrencyCode);
 
+        // Проверка на null для валют
         if (fromCurrency == null || toCurrency == null) {
-            throw new ExchangeRateException.CurrencyNotFoundException(fromCurrencyCode);
+            throw new ExchangeRateException("Обе валюты должны быть указаны.");
         }
 
+        // Обновление курса
         exchangeRateRepo.updateExchangeRate(fromCurrency, toCurrency, newRate);
     }
 }
+
