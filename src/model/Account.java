@@ -9,7 +9,7 @@ public class Account {
     private final Currency currency;
     private final int userId;
 
-    public Account(int id, Currency currency, int userId) { // может быть только один Account в конкретной валюте
+    public Account(Currency currency, int userId) { // может быть только один Account в конкретной валюте
         this.id = accountIdGenerator.getAndIncrement();
         this.balance = 0.0;
         this.currency = currency;
@@ -22,6 +22,10 @@ public class Account {
         return String.format("ID счёта: %6d Пользователь ID: %6d Баланс: %10.2f Валюта: %6s  ",
                 id, userId, balance, currency );
 
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public int getId() {

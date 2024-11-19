@@ -15,4 +15,5 @@ public interface UserRepo {
     public List<User> showAllUsers();
     public boolean isEmailExist(String email);
     public User getUserEmail(String email);
+    public void addAdminUser(String email, String password, String name);
 }
