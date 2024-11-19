@@ -16,6 +16,13 @@ public class Account {
         this.userId = userId;
     }
 
+    // todo проверить вывод
+    @Override
+    public String toString() {
+        return String.format("ID счёта: 6d Пользователь ID: %6d Баланс: %10.2f Валюта: %6s  ",
+                id, userId, balance, currency );
+    }
+
     public int getId() {
         return id;
     }

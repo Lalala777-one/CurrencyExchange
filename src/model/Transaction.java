@@ -9,7 +9,7 @@ public class Transaction {
 
     private final Account fromAccount;
     private final Account toAccount;
-    private final Currency fromCurrency;
+   private final Currency fromCurrency;
     private final Currency toCurrency;
 
     private final double fromAmount;
@@ -20,8 +20,8 @@ public class Transaction {
 
     public Transaction(Account fromAccount,
                        Account toAccount,
-                       Currency fromCurrency,
-                       Currency toCurrency,
+                      Currency fromCurrency,
+                     Currency toCurrency,
                        double fromAmount,
                        double toAmount,
                        double exchangeRate) {
@@ -38,6 +38,20 @@ public class Transaction {
 
     }
 
+
+    // todo проверить вывод
+    @Override
+    public String toString() {
+        return String.format("Транзакция {\n" +
+                        "  ID: %-10d\n" +
+                        "  Счёт отправителя: %-20s\n" +
+                        "  Счёт получателя: %-20s\n" +
+                        "  Сумма отправления: %-10.2f %s\n" +
+                        "  Сумма получения: %-10.2f %s\n" +
+                        "}",
+                transactionId, fromAccount, toAccount, fromAmount, fromCurrency, toAmount, toCurrency);
+    }
+
     public int getTransactionId() {
         return transactionId;
     }
@@ -51,8 +65,8 @@ public class Transaction {
     }
 
     public Currency getFromCurrency() {
-        return fromCurrency;
-    }
+       return fromCurrency;
+   }
 
     public Currency getToCurrency() {
         return toCurrency;

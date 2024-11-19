@@ -10,16 +10,13 @@ public interface UserService {
 
 
     // Регистрация нового пользователя
-    boolean registerUser(String email, String password);
+    boolean registerUser(String email, String password, String name);
 
     // Поиск пользователя по ID
     User findUserById(int userId);
 
-    // Поиск пользователя по email
-    User findUserByEmail(String email);
-
     // Получение списка всех пользователей
-    List<User> getAllUsers();
+    List<User> showAllUsers();
 
 
 }

@@ -19,7 +19,7 @@ public class CurrencyRepoImpl implements CurrencyRepo {
     @Override
     public Currency getCurrencyByCode(String currencyCode) {
         return currencies.get(currencyCode);
-    }
+    } // в сервисе проверить что существует валюта с таким кодом
 
     @Override
     public List<Currency> getAllCurrencies() {

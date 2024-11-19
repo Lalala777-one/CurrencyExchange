@@ -2,13 +2,22 @@ package service;
 
 import model.Account;
 import model.User;
+import repository.*;
 
 import java.util.List;
 
 public class UserServiceImpl implements UserService{
 
+    private final UserRepo userRepo;
+
+
+    public UserServiceImpl(UserRepo userRepo) {
+        this.userRepo = userRepo;
+
+    }
+
     @Override
-    public boolean registerUser(String email, String password) {
+    public boolean registerUser(String email, String password, String name) {
         return false;
     }
 
@@ -18,14 +27,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findUserByEmail(String email) {
-        return null;
-    }
-
-    @Override
-    public List<User> getAllUsers() {
+    public List<User> showAllUsers() {
         return List.of();
     }
-
-
 }

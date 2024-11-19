@@ -2,8 +2,15 @@ package repository;
 
 import model.User;
 
+import java.util.Currency;
+import java.util.List;
+import java.util.Optional;
+
 public interface UserRepo {
+
+
     void addUser(User user);
-    User findUserById(int userID);
-    User deleteUser(int userId); // – удаление пользователя
+    Optional<User> findUserById(int userID);
+    boolean deleteUser(int userId); // – удаление пользователя
+    public List<User> showAllUsers();
 }

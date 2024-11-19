@@ -17,6 +17,13 @@ public class ExchangeRate {
         this.date = LocalDateTime.now();
     }
 
+    // todo проверить вывод
+    @Override
+    public String toString() {
+        return String.format("Курс обмена: %6.2f Из валюты: '%12s'  В валюту: %12s Дата: %10s, }",
+                rate,fromCurrency, toCurrency, date);
+    }
+
     public double getRate() {
         return rate;
     }
