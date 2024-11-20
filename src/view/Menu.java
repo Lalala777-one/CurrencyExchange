@@ -5,12 +5,10 @@ import model.Account;
 import model.Currency;
 import model.Role;
 import model.User;
-import service.AccountService;
-import service.CurrencyService;
-import service.TransactionService;
-import service.UserService;
+import service.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Menu {
@@ -25,20 +23,22 @@ public class Menu {
     private AccountService accountService;
     private TransactionService transactionService;
 
-
-    //todo
-    //   private ExchangeRateService exchangeRateService;
+    private ExchangeRateService exchangeRateService;
 
 // конструктор, принимает "сервисы"
 
     public Menu(UserService userService,
                 CurrencyService currencyService,
                 AccountService accountService,
-                TransactionService transactionService) {
+                TransactionService transactionService, ExchangeRateService exchangeRateService) {
+
+
+
         this.userService = userService;
         this.currencyService = currencyService;
         this.accountService = accountService;
         this.transactionService = transactionService;
+        this.exchangeRateService = exchangeRateService;
     }
 
     public void run() {
@@ -141,8 +141,7 @@ public class Menu {
                 waitRead();
                 break;
             case 4:
-                // Todo
-                // depositMoney(); пополнить счет
+                depositMoney();
                 waitRead();
                 break;
             case 5:
@@ -173,6 +172,84 @@ public class Menu {
 
         }
     } // showUserSubMenu
+
+
+    public void depositMoney() {
+        // Получаем список всех аккаунтов текущего пользователя
+        List<Account> accounts = null;
+
+        try {
+            accounts = accountService.getAllAccountsByUserId(currentUserId);
+        } catch (AccountException e) {
+            System.out.println("Ошибка при получении аккаунтов: " + e.getMessage());
+            return; // Прерываем выполнение метода, если произошла ошибка
+        }
+
+        // Проверяем, есть ли у пользователя аккаунты
+        if (accounts.isEmpty()) {
+            System.out.println("У вас нет доступных аккаунтов.");
+            return;
+        }
+
+        // Выводим все аккаунты
+        System.out.println("Ваши доступные аккаунты:");
+        for (int i = 0; i < accounts.size(); i++) {
+            Account account = accounts.get(i);
+            System.out.println((i + 1) + ". ID: " + account.getId() + ", Баланс: " + account.getBalance());
+        }
+
+        // Запрос ID аккаунта
+        int accountId = 0;
+        boolean validAccountId = false;
+        while (!validAccountId) {
+            System.out.print("Введите номер аккаунта для пополнения (например, 1): ");
+            if (scanner.hasNextInt()) {
+                int accountIndex = scanner.nextInt() - 1;
+                if (accountIndex >= 0 && accountIndex < accounts.size()) {
+                    accountId = accounts.get(accountIndex).getId();
+                    validAccountId = true;
+                } else {
+                    System.out.println("Некорректный номер аккаунта. Пожалуйста, выберите правильный номер.");
+                }
+            } else {
+                System.out.println("Пожалуйста, введите корректный номер аккаунта.");
+                scanner.next(); // Очищаем ввод
+            }
+        }
+
+        // Запрос суммы депозита
+        double amount = 0;
+        boolean validAmount = false;
+        while (!validAmount) {
+            System.out.print("Введите сумму для пополнения: ");
+            if (scanner.hasNextDouble()) {
+                amount = scanner.nextDouble();
+                if (amount <= 0) {
+                    System.out.println("Сумма депозита должна быть больше нуля.");
+                } else {
+                    validAmount = true;
+                }
+            } else {
+                System.out.println("Пожалуйста, введите корректную сумму.");
+                scanner.next(); // Очищаем ввод
+            }
+        }
+
+        try {
+            // Вызов сервиса для пополнения счета
+            accountService.deposit(accountId, amount);
+            System.out.println("Счет успешно пополнен на сумму: " + amount);
+
+            // Обновляем баланс выбранного аккаунта
+            Account updatedAccount = accountService.getAccountById(accountId);
+            System.out.println("Ваш обновленный баланс для аккаунта ID " + updatedAccount.getId() + ": " + updatedAccount.getBalance());
+
+        } catch (AccountException e) {
+
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+    }
+
 
 
     public void closeAccount() {
@@ -394,7 +471,7 @@ public class Menu {
                 break;
             case 3:
                 // Todo
-                // method
+               // addNewCurrency();
                 waitRead();
                 break;
             case 4:
@@ -541,7 +618,6 @@ public class Menu {
         System.out.println(Color.CYAN + "\nНажмите Enter для продолжения" + Color.RESET);
         scanner.nextLine();
     }
-
 
 
 }
