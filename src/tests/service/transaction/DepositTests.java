@@ -1,4 +1,4 @@
-package tests.service;
+package tests.service.transaction;
 
 import model.*;
 import repository.*;
