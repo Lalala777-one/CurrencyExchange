@@ -563,7 +563,7 @@ public class Menu {
                 while (!validChoice) {
                     // Запрашиваем код валюты для нового счета
                     System.out.println("Введите номер валюты, в которой вы хотите открыть счет:");
-                    choice = scanner.nextInt();
+                    choice = getIntInput();
                     scanner.nextLine(); // Читаем лишний символ после ввода числа
 
                     // Проверяем, что пользователь ввел корректный номер валюты
@@ -590,10 +590,26 @@ public class Menu {
                 }
 
                 // Спрашиваем, хочет ли пользователь открыть еще один счет
-                System.out.println(Color.GREEN + "Хотите открыть еще один счет?" + Color.RESET + " (да/нет):");
-                String answer = scanner.nextLine().trim().toLowerCase();
-                if (!answer.equals("да")) {
-                    continueOpeningAccounts = false;  // Прерываем цикл, если пользователь не хочет продолжать
+//                System.out.println(Color.GREEN + "Хотите открыть еще один счет?" + Color.RESET + " (да/нет):");
+//                String answer = scanner.nextLine().trim().toLowerCase();
+//                if (!answer.equals("да")) {
+//                    continueOpeningAccounts = false;  // Прерываем цикл, если пользователь не хочет продолжать
+//                }
+
+                String answer;
+                boolean validAnswer = false;
+                while (!validAnswer) {
+                    System.out.println(Color.GREEN + "Хотите открыть еще один счет?" + Color.RESET + " (да/нет):");
+                    answer = scanner.nextLine().trim().toLowerCase();
+
+                    if (answer.equals("да")) {
+                        validAnswer = true;  // Пользователь выбрал продолжить
+                    } else if (answer.equals("нет")) {
+                        validAnswer = true;  // Пользователь выбрал прекратить
+                        continueOpeningAccounts = false; // Прерываем цикл, если пользователь не хочет продолжать
+                    } else {
+                        System.out.println(Color.RED + "Ошибка:" + Color.RESET + " Неверный ввод. Пожалуйста, введите 'да' или 'нет'.");
+                    }
                 }
             }
 
