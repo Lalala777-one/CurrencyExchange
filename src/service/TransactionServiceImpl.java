@@ -12,6 +12,7 @@ import repository.UserRepo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TransactionServiceImpl implements TransactionService {
 
@@ -290,5 +291,10 @@ public class TransactionServiceImpl implements TransactionService {
             );
             transactionRepo.saveTransaction(transferTransaction);
         }
+    }
+
+    @Override
+    public Map<Integer, Transaction> findAllTransactions(){
+        return transactionRepo.findAllTransactions();
     }
 }
