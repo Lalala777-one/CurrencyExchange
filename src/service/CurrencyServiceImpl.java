@@ -19,7 +19,7 @@ public class CurrencyServiceImpl implements CurrencyService{
             throw new IllegalArgumentException("Валюта с кодом " + currency.getCode() + " уже существует.");
         }
         currencyMap.put(currency.getCode(), currency);
-        System.out.println("Валюта " + currency.getName() + " додана успішно.");
+        System.out.println("Валюта " + currency.getName() + " успешно добавлена.");
     }
 
     @Override
