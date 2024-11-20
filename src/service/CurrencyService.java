@@ -14,6 +14,5 @@ public interface CurrencyService {  // управление курсами ва�
     List<Currency> getAllCurrencies() throws CurrencyException; //– получение всех валют
 
 
-
-
+    void removeCurrency(String currencyCode);
 }

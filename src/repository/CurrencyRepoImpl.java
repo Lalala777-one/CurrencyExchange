@@ -25,4 +25,13 @@ public class CurrencyRepoImpl implements CurrencyRepo {
     public List<Currency> getAllCurrencies() {
         return new ArrayList<>(currencies.values());
     }
+
+    @Override
+    public boolean deleteCurrency(String currencyCode) {
+        if (currencies.containsKey(currencyCode)) {
+            currencies.remove(currencyCode); // Удаляем валюту по её коду
+            return true;
+        }
+        return false;
+    }
 }

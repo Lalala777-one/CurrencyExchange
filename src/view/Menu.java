@@ -1,16 +1,12 @@
 package view;
 
-import exceptionsUtils.AccountException;
-import exceptionsUtils.EmailValidateException;
-import exceptionsUtils.PasswordValidateException;
-import exceptionsUtils.UserException;
+import exceptionsUtils.*;
 import model.Account;
+import model.Currency;
 import model.Role;
 import model.User;
-import service.AccountService;
-import service.CurrencyService;
-import service.TransactionService;
-import service.UserService;
+import repository.CurrencyRepo;
+import service.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -26,6 +22,8 @@ public class Menu {
     private CurrencyService currencyService;
     private AccountService accountService;
     private TransactionService transactionService;
+    private ExchangeRateService exchangeRateService;
+    private CurrencyRepo currencyRepo;
 
 
     //todo
@@ -36,11 +34,13 @@ public class Menu {
     public Menu(UserService userService,
                 CurrencyService currencyService,
                 AccountService accountService,
-                TransactionService transactionService) {
+                TransactionService transactionService, ExchangeRateService exchangeRateService, CurrencyRepo currencyRepo) {
         this.userService = userService;
         this.currencyService = currencyService;
         this.accountService = accountService;
         this.transactionService = transactionService;
+        this.exchangeRateService = exchangeRateService;
+        this.currencyRepo = currencyRepo;
     }
 
     public void run() {
@@ -160,7 +160,7 @@ public class Menu {
                 break;
             case 7:
                 // Todo
-                // exchangeCurrency(); обменять валюту
+//                exchangeCurrency();
                 waitRead();
                 break;
             case 8:
@@ -232,6 +232,7 @@ public class Menu {
 
 
 
+
     // МЕНЮ АДМИНИСТРАТОРА
     private void showAdminMenu() {
         if (activeUser.getRole() == Role.ADMIN) {
@@ -267,12 +268,12 @@ public class Menu {
                 break;
             case 3:
                 // Todo
-                // method
+                addNewCurrency();
                 waitRead();
                 break;
             case 4:
                 // Todo
-                // method
+                deleteCurrency();
                 waitRead();
                 break;
             case 5:
@@ -389,6 +390,38 @@ public class Menu {
         scanner.nextLine();
     }
 
+    private void addNewCurrency() {
+        try {
+            System.out.println("Введите код новой валюты (например, USD):");
+            String currencyCode = scanner.nextLine().toUpperCase();
+            System.out.println("Введите название валюты:");
+            String currencyName = scanner.nextLine();
 
+
+            // Создаем новую валюту через CurrencyService
+            Currency newCurrency = new Currency(currencyCode, currencyName);
+            currencyService.addCurrency(newCurrency);
+
+            System.out.println(Color.GREEN + "Валюта успешно добавлена: " + newCurrency + Color.RESET);
+        } catch (Exception e) {
+            System.out.println(Color.RED + "Ошибка при добавлении валюты: " + e.getMessage() + Color.RESET);
+        }
+        waitRead();
+    }
+
+    private void deleteCurrency() {
+        try {
+            System.out.println("Введите код валюты, которую хотите удалить (например, USD):");
+            String currencyCode = scanner.nextLine().toUpperCase();
+
+            // Удаляем валюту через CurrencyService
+            currencyService.removeCurrency(currencyCode);
+
+            System.out.println(Color.GREEN + "Валюта с кодом " + currencyCode + " успешно удалена." + Color.RESET);
+        } catch (Exception e) {
+            System.out.println(Color.RED + "Ошибка при удалении валюты: " + e.getMessage() + Color.RESET);
+        }
+        waitRead();
+    }
 
 }
