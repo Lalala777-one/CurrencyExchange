@@ -41,7 +41,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     @Override
-    public double getExchangeRate(Currency fromCurrencyCode, Currency toCurrencyCode) throws ExchangeRateException {
+    public double getExchangeRate(String fromCurrencyCode, String toCurrencyCode) throws ExchangeRateException {
 
         Currency fromCurrency = new Currency("Unknown", fromCurrencyCode);
         Currency toCurrency = new Currency("Unknown", toCurrencyCode);
