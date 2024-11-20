@@ -192,6 +192,14 @@ public class Menu {
         return amount;
     } // Методы для обмена валюты конец
 
+    private int getIntInput() {
+        while (!scanner.hasNextInt()) {
+            String input = scanner.next();
+            System.out.println("Это не число! Пожалуйста, введите целое число.");
+        }
+        return scanner.nextInt();  // Повертаємо правильне число
+    }
+
     // МЕНЮ ДЛЯ НЕ ЗАРЕГИСТРИРОВАННОГО ПОЛЬЗОВАТЕЛЯ
     private void showGuestMenu() {
         if (activeUser.getRole() == Role.GUEST) {
@@ -203,9 +211,8 @@ public class Menu {
                 System.out.println("3. Посмотреть курс валют");
                 System.out.println(Color.GREEN + "\n\033[1m\033[3mПожалуйста, выберите пункт меню:\033[0m" + Color.RESET);
 
-                int choice = scanner.nextInt();
+                int choice = getIntInput();
                 scanner.nextLine();
-
                 showGuestSubMenu(choice);
             }
         }
@@ -228,7 +235,7 @@ public class Menu {
                 waitRead();
                 break;
             default:
-                System.out.println(Color.GREEN + "\033[3mСделайте корректный выбор\\033[0m\n");
+                System.out.println(Color.GREEN + "\033[3mСделайте корректный выбор\033[0m\n");
         }
     }//
 
@@ -800,7 +807,7 @@ public class Menu {
             System.out.println(Color.RED + "Произошла неизвестная ошибка: " + e.getMessage() + Color.RESET);
         }
 
-        waitRead(); // Ожидаем ввода
+//        waitRead(); // Ожидаем ввода  |-> Задвоение для Нажмите Enter для продолжения
     }
 
     public void showAllUsersList() {
@@ -850,14 +857,6 @@ public class Menu {
             System.out.println(Color.BLUE + "___________________________________________________________" + Color.RESET);
         } catch (Exception e) {
             System.out.println(Color.RED + "Произошла ошибка при получении курсов валют: " + e.getMessage() + Color.RESET);
-        }
-
-        System.out.println(Color.BLUE + "\n0. Вернуться в предыдущее меню" + Color.RESET);
-        System.out.println(Color.GREEN + "\nСделайте выбор:" + Color.RESET);
-
-        int input = scanner.nextInt();
-        if (input == 0) {
-            return;
         }
     }
 
