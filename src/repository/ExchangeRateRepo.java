@@ -10,7 +10,8 @@ public interface ExchangeRateRepo {
     void updateExchangeRate(Currency fromCurrency, Currency toCurrency, double rate);
     double getExchangeRate(Currency fromCurrency, Currency toCurrency);
     void removeExchangeRate(Currency fromCurrency, Currency toCurrency);
-    Map<Currency, ExchangeRate> getAllExchangeMap();
-
+    //Map<Currency, ExchangeRate> getAllExchangeMap();
+    public Map<String, ExchangeRate> getAllExchangeMap();
     void clear();
+
 }

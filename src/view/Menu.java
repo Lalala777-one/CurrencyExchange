@@ -58,6 +58,141 @@ public class Menu {
         }
     }
 
+    // МЕТОДЫ ДЛЯ ОБМЕНА ВАЛЮТЫ
+
+    public void convertCurrency() {
+        // Отображаем доступные валюты для конвертации
+        System.out.println("Доступные валюты для конвертации:");
+        System.out.println("1. Евро (EUR)");
+
+        // Добавляем другие валюты
+        System.out.println("2. US Dollar (USD)");
+        System.out.println("3. Swedish Krona (SEK)");
+        System.out.println("4. British Pound (GBP)");
+        System.out.println("5. Japanese Yen (JPY)");
+        System.out.println("6. Swiss Franc (CHF)");
+
+        // Запрашиваем валюту, из которой пользователь хочет конвертировать
+        Currency fromCurrency = getCurrencyFromUser();
+
+        // Запрашиваем валюту, в которую пользователь хочет конвертировать
+        Currency toCurrency = getCurrencyToUser(fromCurrency);
+
+        // Запрашиваем сумму для конвертации
+        double amount = getAmountFromUser();
+
+        try {
+            // Выполняем конвертацию через сервис
+            double convertedAmount = exchangeRateService.convertCurrency(fromCurrency, toCurrency, amount);
+
+            // Показываем результат
+           // System.out.println("Конвертированная сумма: " + convertedAmount + " " + toCurrency.getCode());
+        } catch (ExchangeRateException e) {
+            System.out.println("Ошибка конвертации: " + e.getMessage());
+        }
+
+        // Ждем нажатие Enter для возвращения в меню
+        System.out.println(" ");
+        scanner.nextLine(); // Считываем пустую строку после предыдущего ввода
+        // scanner.nextLine(); // Ожидаем, пока пользователь нажмет Enter
+    }
+
+    private Currency getCurrencyFromUser() {
+        // Запрос валюты, из которой будем конвертировать
+        Currency selectedCurrency = null;
+        while (selectedCurrency == null) {
+            System.out.print("Введите код валюты для конвертации из (например, EUR, USD, SEK): ");
+            String fromCurrencyCode = scanner.nextLine().toUpperCase();
+
+            // Получаем валюту по коду
+            switch (fromCurrencyCode) {
+                case "EUR":
+                    selectedCurrency = new Currency("Euro", "EUR");
+                    break;
+                case "USD":
+                    selectedCurrency = new Currency("US Dollar", "USD");
+                    break;
+                case "SEK":
+                    selectedCurrency = new Currency("Swedish Krona", "SEK");
+                    break;
+                case "GBP":
+                    selectedCurrency = new Currency("British Pound", "GBP");
+                    break;
+                case "JPY":
+                    selectedCurrency = new Currency("Japanese Yen", "JPY");
+                    break;
+                case "CHF":
+                    selectedCurrency = new Currency("Swiss Franc", "CHF");
+                    break;
+                default:
+                    System.out.println("Неверный код валюты. Пожалуйста, попробуйте снова.");
+                    break;
+            }
+        }
+        return selectedCurrency;
+    }
+
+    private Currency getCurrencyToUser(Currency fromCurrency) {
+        // Запрос валюты, в которую будем конвертировать
+        Currency selectedCurrency = null;
+        while (selectedCurrency == null) {
+            System.out.print("Введите код валюты для конвертации в (например, EUR, USD, SEK): ");
+            String toCurrencyCode = scanner.nextLine().toUpperCase();
+
+            // Проверяем, что это не та же валюта, из которой мы конвертируем
+            if (toCurrencyCode.equals(fromCurrency.getCode())) {
+                System.out.println("Невозможно конвертировать в ту же валюту. Пожалуйста, выберите другую валюту.");
+                continue;
+            }
+
+            // Получаем валюту по коду
+            switch (toCurrencyCode) {
+                case "EUR":
+                    selectedCurrency = new Currency("Euro", "EUR");
+                    break;
+                case "USD":
+                    selectedCurrency = new Currency("US Dollar", "USD");
+                    break;
+                case "SEK":
+                    selectedCurrency = new Currency("Swedish Krona", "SEK");
+                    break;
+                case "GBP":
+                    selectedCurrency = new Currency("British Pound", "GBP");
+                    break;
+                case "JPY":
+                    selectedCurrency = new Currency("Japanese Yen", "JPY");
+                    break;
+                case "CHF":
+                    selectedCurrency = new Currency("Swiss Franc", "CHF");
+                    break;
+                default:
+                    System.out.println("Неверный код валюты. Пожалуйста, попробуйте снова.");
+                    break;
+            }
+        }
+        return selectedCurrency;
+    }
+
+    private double getAmountFromUser() {
+        double amount = 0;
+        boolean validAmount = false;
+        while (!validAmount) {
+            System.out.print("Введите сумму для конвертации: ");
+            if (scanner.hasNextDouble()) {
+                amount = scanner.nextDouble();
+                if (amount <= 0) {
+                    System.out.println("Сумма конвертации должна быть больше нуля.");
+                } else {
+                    validAmount = true;
+                }
+            } else {
+                System.out.println("Пожалуйста, введите корректную сумму.");
+                scanner.next(); // Очищаем ввод
+            }
+        }
+        return amount;
+    } // Методы для обмена валюты конец
+
     // МЕНЮ ДЛЯ НЕ ЗАРЕГИСТРИРОВАННОГО ПОЛЬЗОВАТЕЛЯ
     private void showGuestMenu() {
         if (activeUser.getRole() == Role.GUEST) {
@@ -145,17 +280,15 @@ public class Menu {
                 waitRead();
                 break;
             case 5:
-                // Todo
-                //  withdrawMoney(); снять со счета
-                waitRead();
+                withdrawMoney();
+                 waitRead();
                 break;
             case 6:
                 closeAccount();
                 waitRead();
                 break;
             case 7:
-                // Todo
-                // exchangeCurrency(); обменять валюту
+                convertCurrency();
                 waitRead();
                 break;
             case 8:
@@ -172,6 +305,85 @@ public class Menu {
 
         }
     } // showUserSubMenu
+
+    public void withdrawMoney() {
+        // Получаем список всех аккаунтов текущего пользователя
+        List<Account> accounts = null;
+
+        try {
+            accounts = accountService.getAllAccountsByUserId(currentUserId);
+        } catch (AccountException e) {
+            System.out.println("Ошибка при получении аккаунтов: " + e.getMessage());
+            return; // Прерываем выполнение метода, если произошла ошибка
+        }
+
+        // Проверяем, есть ли у пользователя аккаунты
+        if (accounts.isEmpty()) {
+            System.out.println("У вас нет доступных аккаунтов.");
+            return;
+        }
+
+        // Выводим все аккаунты
+        System.out.println("Ваши доступные аккаунты:");
+        for (int i = 0; i < accounts.size(); i++) {
+            Account account = accounts.get(i);
+            System.out.println((i + 1) + ". ID: " + account.getId() + ", Баланс: " + account.getBalance());
+        }
+
+        // Запрос ID аккаунта для снятия средств
+        int accountId = 0;
+        boolean validAccountId = false;
+        while (!validAccountId) {
+            System.out.print("Введите номер аккаунта для снятия средств (например, 1): ");
+            if (scanner.hasNextInt()) {
+                int accountIndex = scanner.nextInt() - 1;
+                if (accountIndex >= 0 && accountIndex < accounts.size()) {
+                    accountId = accounts.get(accountIndex).getId();
+                    validAccountId = true;
+                } else {
+                    System.out.println("Некорректный номер аккаунта. Пожалуйста, выберите правильный номер.");
+                }
+            } else {
+                System.out.println("Пожалуйста, введите корректный номер аккаунта.");
+                scanner.next(); // Очищаем ввод
+            }
+        }
+
+        // Запрос суммы для снятия
+        double amount = 0;
+        boolean validAmount = false;
+        while (!validAmount) {
+            System.out.print("Введите сумму для снятия: ");
+            if (scanner.hasNextDouble()) {
+                amount = scanner.nextDouble();
+                if (amount <= 0) {
+                    System.out.println("Сумма снятия должна быть больше нуля.");
+                } else {
+                    validAmount = true;
+                }
+            } else {
+                System.out.println("Пожалуйста, введите корректную сумму.");
+                scanner.next(); // Очищаем ввод
+            }
+        }
+
+        try {
+            // снимаем средства с выбранного аккаунта
+            accountService.withdraw(accountId, amount);
+            System.out.println("Счет успешно обновлен: сумма снята: " + amount);
+
+            // Обновляем баланс выбранного аккаунта
+            Account updatedAccount = accountService.getAccountById(accountId);
+            System.out.println("Ваш обновленный баланс для аккаунта ID " + updatedAccount.getId() + ": " + updatedAccount.getBalance());
+
+        } catch (AccountException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+        System.out.println(" ");
+        //System.out.println(Color.GREEN + "\nНажмите Enter для возвращения в меню..." + Color.RESET);
+        scanner.nextLine(); // Считываем пустую строку после предыдущего ввода
+        //1scanner.nextLine();
+    }
 
 
     public void depositMoney() {
@@ -238,16 +450,19 @@ public class Menu {
         try {
             // Вызов сервиса для пополнения счета
             accountService.deposit(accountId, amount);
-            System.out.println("Счет успешно пополнен на сумму: " + amount);
+            System.out.println(Color.YELLOW + "Счет успешно пополнен на сумму: " + Color.RESET + amount);
 
             // Обновляем баланс выбранного аккаунта
             Account updatedAccount = accountService.getAccountById(accountId);
-            System.out.println("Ваш обновленный баланс для аккаунта ID " + updatedAccount.getId() + ": " + updatedAccount.getBalance());
+            System.out.println(Color.YELLOW + "Ваш обновленный баланс для аккаунта ID " + Color.RESET  + updatedAccount.getId() + ": " + updatedAccount.getBalance());
 
         } catch (AccountException e) {
 
             System.out.println("Ошибка: " + e.getMessage());
         }
+        System.out.println(" ");
+        //System.out.println(Color.GREEN + "\nНажмите Enter для возвращения в меню..." + Color.RESET);
+        scanner.nextLine(); // Считываем пустую строку после предыдущего ввода
     }
 
 
