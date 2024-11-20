@@ -1,4 +1,4 @@
-package tests.service.transaction;
+package tests.service;
 
 import org.junit.jupiter.api.*;
 import model.*;
