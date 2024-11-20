@@ -55,6 +55,14 @@ public class UserRepoImpl implements UserRepo{
         return new ArrayList<>(users.values()); // Возвращаем список всех пользователей
     }
 
+    public boolean existsById(int userId){
+        return users.containsKey(userId);
+    }
+
+    public void clear(){
+        users.clear();
+    }
+
     public boolean isEmailExist(String email) {
         // Проверяем, есть ли среди пользователей тот, у кого email совпадает
         return users.values().stream()

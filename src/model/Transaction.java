@@ -1,15 +1,16 @@
 package model;
 
+import repository.AccountRepo;
+
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Transaction {
     private static final AtomicInteger transactionIdGenerator = new AtomicInteger(1);
     private final int transactionId;
-
     private final Account fromAccount;
     private final Account toAccount;
-   private final Currency fromCurrency;
+    private final Currency fromCurrency;
     private final Currency toCurrency;
 
     private final double fromAmount;
@@ -20,24 +21,21 @@ public class Transaction {
 
     public Transaction(Account fromAccount,
                        Account toAccount,
-                      Currency fromCurrency,
-                     Currency toCurrency,
+                       Currency fromCurrency,
+                       Currency toCurrency,
                        double fromAmount,
                        double toAmount,
                        double exchangeRate) {
-
         this.transactionId = transactionIdGenerator.getAndIncrement();;
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.fromCurrency = fromCurrency;
-        this.toCurrency = toCurrency;
+        this.toCurrency = toCurrency != null ? toCurrency : fromCurrency;
         this.fromAmount = fromAmount;
-        this.toAmount = toAmount;
+        this.toAmount = toAmount != 0 ? toAmount : fromAmount * exchangeRate;
         this.exchangeRate = exchangeRate;
         this.timeOperation = LocalDateTime.now();
-
     }
-
 
     // todo проверить вывод
     @Override

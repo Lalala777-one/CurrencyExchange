@@ -25,7 +25,7 @@ public interface TransactionService {
     // Снятие средств с счета пользователя
     void withdraw(int userId, int accountId, double amount);
 
-
+    void transfer(int fromAccountId, int toAccountId, double amount);
 }
 
 

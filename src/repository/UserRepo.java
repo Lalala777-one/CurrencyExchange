@@ -13,7 +13,12 @@ public interface UserRepo {
     Optional<User> findUserById(int userID);
     boolean deleteUser(int userId); // – удаление пользователя
     public List<User> showAllUsers();
+
+    boolean existsById(int userId);
+    void clear();
+
     public boolean isEmailExist(String email);
     public User getUserEmail(String email);
     public void addAdminUser(String email, String password, String name);
+
 }

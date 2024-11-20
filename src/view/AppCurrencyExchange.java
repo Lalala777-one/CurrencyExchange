@@ -25,8 +25,12 @@ public class AppCurrencyExchange {
 
         AccountService accountService = new AccountServiceImpl(accountRepo, currencyRepo, userRepo);
         CurrencyService currencyService = new CurrencyServiceImpl();
+
+        TransactionService transactionService = new TransactionServiceImpl(exchangeRateRepo, transactionRepo, accountRepo, userRepo);
+
         ExchangeRateServiceImpl exchangeRateService = new ExchangeRateServiceImpl(exchangeRateRepo);
         TransactionService transactionService = new TransactionServiceImpl();
+
         UserService userService = new UserServiceImpl(userRepo);
 
         userRepo.addAdminUser("adminemail@gmail.com", "Admin1234!", "Админ");

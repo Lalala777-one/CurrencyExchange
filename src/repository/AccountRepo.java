@@ -9,4 +9,7 @@ public interface AccountRepo {
     List<Account> getAccountsByUserId(int userId);
     Account getAccountById(int accountId);
     void deleteAccount(int userId, int accountId);
+
+    boolean existsById(int accountId);
+    void clear();
 }
