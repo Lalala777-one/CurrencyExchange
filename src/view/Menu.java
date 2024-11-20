@@ -1,18 +1,13 @@
 package view;
 
-import exceptionsUtils.AccountException;
-import exceptionsUtils.EmailValidateException;
-import exceptionsUtils.PasswordValidateException;
-import exceptionsUtils.UserException;
-import model.Account;
-import model.Role;
-import model.User;
-import service.AccountService;
-import service.CurrencyService;
-import service.TransactionService;
-import service.UserService;
+import exceptionsUtils.*;
+import model.*;
+import service.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Menu {
@@ -26,21 +21,20 @@ public class Menu {
     private CurrencyService currencyService;
     private AccountService accountService;
     private TransactionService transactionService;
-
-
-    //todo
-    //   private ExchangeRateService exchangeRateService;
+    private ExchangeRateService exchangeRateService;
 
 // конструктор, принимает "сервисы"
 
     public Menu(UserService userService,
                 CurrencyService currencyService,
                 AccountService accountService,
-                TransactionService transactionService) {
+                TransactionService transactionService,
+                ExchangeRateService exchangeRateService) {
         this.userService = userService;
         this.currencyService = currencyService;
         this.accountService = accountService;
         this.transactionService = transactionService;
+        this.exchangeRateService = exchangeRateService;
     }
 
     public void run() {
@@ -92,8 +86,7 @@ public class Menu {
                 waitRead();
                 break;
             case 3:
-                // Todo
-                // showCurrencyRates();
+                showCurrencyRates();
                 waitRead();
                 break;
             default:
@@ -130,8 +123,7 @@ public class Menu {
     private void showUserSubMenu(int choice) {
         switch (choice) {
             case 1:
-                // Todo
-                // showCurrencyRates();
+                showCurrencyRates();
                 waitRead();
                 break;
             case 2:
@@ -389,6 +381,41 @@ public class Menu {
         scanner.nextLine();
     }
 
+    public void showCurrencyRates() {
+        try {
+            System.out.println(Color.BLUE + "\t\t\033[1mКурсы валют\033[0m" + Color.RESET);
+            System.out.printf("%-17s%-15s%n", "Валюта", "Курс к EUR");
+            System.out.println(Color.BLUE + "___________________________" + Color.RESET);
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss (E. dd.MM.yy)");
 
+            Map<Currency, ExchangeRate> rates = exchangeRateService.getAllExchangeRates();
+
+            for (Map.Entry<Currency, ExchangeRate> entry : rates.entrySet()) {
+                Currency currency = entry.getKey();
+                ExchangeRate exchangeRate = entry.getValue();
+
+                System.out.printf("%-20s%-15.2f%n",
+                        currency.getCode(),
+                        exchangeRate.getRate()
+                );
+            }
+
+            System.out.println(Color.BLUE + "___________________________" + Color.RESET);
+
+            LocalDateTime currentTime = LocalDateTime.now();
+            String formattedDate = currentTime.format(formatter);
+            System.out.println("Курсы валют обновлены на: \n\t" + formattedDate);
+
+        } catch (Exception e) {
+            System.out.println(Color.RED + "Произошла ошибка при получении курсов валют: " + e.getMessage() + Color.RESET);
+        }
+
+        System.out.println(Color.BLUE + "\n0. Вернуться в предыдущее меню" + Color.RESET);
+        System.out.println(Color.GREEN + "\nСделайте выбор:" + Color.RESET);
+        int input = scanner.nextInt();
+        if (input == 0) {
+            return;
+        }
+    }
 }

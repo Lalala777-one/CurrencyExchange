@@ -21,11 +21,11 @@ public class ExchangeRateRepoImpl implements ExchangeRateRepo {
         Currency jpy = new Currency("Japanese Yen", "JPY");
         Currency chf = new Currency("Swiss Franc", "CHF");
 
-        addExchangeRate(eur, usd, 0.92);
-        addExchangeRate(eur, sek, 11.5);
-        addExchangeRate(eur, gbp, 0.88);
-        addExchangeRate(eur, jpy, 150.0);
-        addExchangeRate(eur, chf, 0.95);
+        addExchangeRate(usd, eur, 0.92);
+        addExchangeRate(sek, eur, 11.5);
+        addExchangeRate(gbp, eur, 0.88);
+        addExchangeRate(jpy, eur, 150.0);
+        addExchangeRate(chf, eur, 0.95);
     }
 
     @Override
@@ -86,18 +86,6 @@ public class ExchangeRateRepoImpl implements ExchangeRateRepo {
     public Map<Currency, ExchangeRate> getAllExchangeMap() {
         return new LinkedHashMap<>(exchangeRateMap);
     }
-
-
-//    @Override
-//    public double getExchangeRate(Currency fromCurrency, Currency toCurrency) {
-//        String key = fromCurrency.getCode() + "-" + toCurrency.getCode();  // Створюємо ключ для пошуку
-//        ExchangeRate exchangeRate = exchangeRates.get(key);  // Шукаємо за ключем
-//        if (exchangeRate == null) {
-//            throw new IllegalArgumentException("Обменный курс " + fromCurrency + " к базовой валюте не найдено");
-//        }
-//        return exchangeRate.getRate();
-//    }
-
 
     @Override
     public void clear() {

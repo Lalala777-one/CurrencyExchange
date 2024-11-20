@@ -2,7 +2,10 @@ package service;
 
 import exceptionsUtils.ExchangeRateException;
 import model.Currency;
+import model.ExchangeRate;
 import repository.ExchangeRateRepo;
+
+import java.util.Map;
 
 public class ExchangeRateServiceImpl implements ExchangeRateService {
 
@@ -73,6 +76,11 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
 
         // Обновление курса
         exchangeRateRepo.updateExchangeRate(fromCurrency, toCurrency, newRate);
+    }
+
+    @Override
+    public Map<Currency, ExchangeRate> getAllExchangeRates() {
+        return exchangeRateRepo.getAllExchangeMap();
     }
 }
 
