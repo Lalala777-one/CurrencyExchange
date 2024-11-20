@@ -13,7 +13,7 @@ public interface CurrencyService {  // управление курсами ва�
 
     List<Currency> getAllCurrencies() throws CurrencyException; //– получение всех валют
 
-
+    public void removeCurrency(String currencyCode) throws CurrencyException;
 
 
 }

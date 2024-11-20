@@ -686,12 +686,12 @@ public class Menu {
                 break;
             case 3:
                 // Todo
-               // addNewCurrency();
+                addNewCurrency();
                 waitRead();
                 break;
             case 4:
                 // Todo
-                // method
+                removeCurrencyFromMenu();
                 waitRead();
                 break;
             case 5:
@@ -701,6 +701,7 @@ public class Menu {
                 System.out.println(Color.GREEN + "\033[3mСделайте корректный выбор\033[0m\n" + Color.RESET);
         }
     }
+
 
 
     // МЕТОДЫ
@@ -833,6 +834,82 @@ public class Menu {
         System.out.println(Color.CYAN + "\nНажмите Enter для продолжения" + Color.RESET);
         scanner.nextLine();
     }
+
+    public void addNewCurrency() {
+        // Проверяем, что текущий пользователь — администратор
+        if (activeUser.getRole() != Role.ADMIN) {
+            System.out.println(Color.RED + "Ошибка:" + Color.RESET + " у вас нет прав для доступа к данному меню.");
+            return;
+        }
+
+        // Спрашиваем код валюты первым
+        String currencyCode = "";
+        boolean validCode = false;
+        while (!validCode) {
+            System.out.print("Введите код валюты (например, USD, EUR): ");
+            currencyCode = scanner.nextLine().toUpperCase();  // Приводим к коду валюты в верхнем регистре
+            if (currencyCode.length() == 3) {
+                validCode = true;
+            } else {
+                System.out.println(Color.RED + "Ошибка:" + Color.RESET + " Код валюты должен состоять из 3 символов.");
+            }
+        }
+
+        // Проверяем, существует ли валюта с таким кодом
+        try {
+            // Используем метод getCurrencyByCode для проверки, существует ли такая валюта
+            Currency existingCurrency = currencyService.getCurrencyByCode(currencyCode);
+            if (existingCurrency != null) {
+                // Если валюта с таким кодом уже существует, выводим сообщение
+                System.out.println(Color.RED + "Ошибка при добавлении валюты: Валюта с кодом " + currencyCode + " уже существует." + Color.RESET);
+                return;  // Возвращаемся в меню, не добавляя валюту
+            }
+        } catch (CurrencyException e) {
+            // Валюта не найдена, это ожидаемое поведение, продолжаем добавление
+        }
+
+        // Запрашиваем название валюты
+        System.out.print("Введите название валюты: ");
+        String currencyName = scanner.nextLine();
+
+        // Запрашиваем курс валюты (опционально, можно добавить, если это требуется)
+        System.out.print("Введите курс валюты к основным валютам (например, 1.0 для базовой валюты): ");
+        double exchangeRate = scanner.nextDouble();
+        scanner.nextLine();  // Считываем лишний символ после ввода числа
+
+        // Создаем новую валюту
+        Currency newCurrency = new Currency(currencyName, currencyCode);
+
+        try {
+            // Попытка добавить валюту в систему
+            currencyService.addCurrency(newCurrency);
+            System.out.println(Color.GREEN + "Новая валюта " + currencyName + " с кодом " + currencyCode + " успешно добавлена!" + Color.RESET);
+        } catch (CurrencyException e) {
+            // Обработка исключений, если валюта не была добавлена (например, валюта с таким кодом уже существует)
+            System.out.println(Color.RED + "Ошибка при добавлении валюты: " + e.getMessage() + Color.RESET);
+        }
+    }
+
+    // В классе, где отображается меню администратора
+    public void removeCurrencyFromMenu() {
+        if (activeUser.getRole() != Role.ADMIN) {
+            System.out.println(Color.RED + "Ошибка:" + Color.RESET + " у вас нет прав для доступа к данному меню.");
+            return;
+        }
+
+        // Запрашиваем код валюты для удаления
+        System.out.print("Введите код валюты, которую хотите удалить (например, USD, EUR): ");
+        String currencyCode = scanner.nextLine().toUpperCase();  // Приводим код валюты к верхнему регистру
+
+        try {
+            // Вызываем сервис для удаления валюты
+            currencyService.removeCurrency(currencyCode);
+        } catch (CurrencyException e) {
+            System.out.println(Color.RED + "Ошибка: " + e.getMessage() + Color.RESET);
+        }
+
+    }
+
 
 
 }
