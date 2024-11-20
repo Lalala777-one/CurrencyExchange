@@ -28,12 +28,13 @@ public class AppCurrencyExchange {
         TransactionService transactionService = new TransactionServiceImpl();
         UserService userService = new UserServiceImpl(userRepo);
 
+        userRepo.addAdminUser("adminemail@gmail.com", "Admin1234!", "Админ");
+
 
         Menu menu = new Menu(userService, currencyService, accountService, transactionService);
 
         menu.run();
 
-        }
     }
-
+}
 
