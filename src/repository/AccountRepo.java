@@ -11,7 +11,5 @@ public interface AccountRepo {
     void deleteAccount(int userId, int accountId);
 
     boolean existsById(int accountId);
-    Integer getAccountId(int accountId);
-
     void clear();
 }
