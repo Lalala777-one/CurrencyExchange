@@ -1,5 +1,6 @@
 package service;
 
+import exceptionsUtils.TransactionException;
 import model.Account;
 import model.Currency;
 import model.ExchangeRate;
@@ -29,38 +30,38 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void addTransaction(Transaction transaction) {
         if (transaction == null) {
-            throw new IllegalArgumentException("Транзакция не может быть null");
+            throw new TransactionException("Транзакция не может быть null");
         }
 
         if (transaction.getFromAmount() <= 0) {
-            throw new IllegalArgumentException("Сумма должна быть больше нуля");
+            throw new TransactionException("Сумма должна быть больше нуля");
         }
 
         if (transaction.getFromAccount() == null || transaction.getToAccount() == null) {
-            throw new IllegalArgumentException("Оба аккаунта должны быть действительными.");
+            throw new TransactionException("Оба аккаунта должны быть действительными.");
         }
 
         Account fromAccount = accountRepo.getAccountById(transaction.getFromAccount().getId());
         Account toAccount = accountRepo.getAccountById(transaction.getToAccount().getId());
 
         if (!accountRepo.existsById(transaction.getFromAccount().getId())) {
-            throw new IllegalArgumentException("Аккаунт отправителя не найден.");
+            throw new TransactionException("Аккаунт отправителя не найден.");
         }
 
         if (!accountRepo.existsById(transaction.getToAccount().getId())) {
-            throw new IllegalArgumentException("Счет получателя не был найден.");
+            throw new TransactionException("Счет получателя не был найден.");
         }
 
         if (transaction.getToAmount() <= 0) {
-            throw new IllegalArgumentException("Сумма должна быть больше нуля");
+            throw new TransactionException("Сумма должна быть больше нуля");
         }
 
         if (transaction.getExchangeRate() <= 0) {
-            throw new IllegalArgumentException("Обменный курс должен быть больше 0.");
+            throw new TransactionException("Обменный курс должен быть больше 0.");
         }
 
         if (transaction.getFromAccount().getBalance() < transaction.getFromAmount()) {
-            throw new IllegalArgumentException("На счету отправителя недостаточно средств.");
+            throw new TransactionException("На счету отправителя недостаточно средств.");
         }
 
 
@@ -75,11 +76,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<Transaction> findTransactionsByUserId(int userId) {
         if (userId <= 0) {
-            throw new IllegalArgumentException("Идентификатор пользователя должен быть положительным числом.");
+            throw new TransactionException("Идентификатор пользователя должен быть положительным числом.");
         }
 
         if (!userRepo.existsById(userId)) {
-            throw new IllegalArgumentException("Пользователь с указанным идентификатором не существует.");
+            throw new TransactionException("Пользователь с указанным идентификатором не существует.");
         }
 
         List<Transaction> transactions = transactionRepo.findTransactionsByUserId(userId);
@@ -95,11 +96,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<Transaction> findTransactionsByAccountId(int accountId) {
         if (accountId <= 0) {
-            throw new IllegalArgumentException("Идентификатор аккаунта должен быть положительным числом.");
+            throw new TransactionException("Идентификатор аккаунта должен быть положительным числом.");
         }
 
         if (!accountRepo.existsById(accountId)) {
-            throw new IllegalArgumentException("Аккаунт с указанным идентификатором не существует.");
+            throw new TransactionException("Аккаунт с указанным идентификатором не существует.");
         }
 
         List<Transaction> transactions = transactionRepo.findTransactionsByAccountId(accountId);
@@ -119,15 +120,15 @@ public class TransactionServiceImpl implements TransactionService {
         Account toAccount = accountRepo.getAccountById(toAccountId);
 
         if (fromAccount == null || toAccount == null) {
-            throw new IllegalArgumentException("Учетные записи должны быть действительными.");
+            throw new TransactionException("Учетные записи должны быть действительными.");
         }
 
         if (fromAccount.getUserId() != userId || toAccount.getUserId() != userId) {
-            throw new IllegalArgumentException("Учетные записи должны принадлежать одному и тому же пользователю.");
+            throw new TransactionException("Учетные записи должны принадлежать одному и тому же пользователю.");
         }
 
         if (fromAccount.getBalance() < amount) {
-            throw new IllegalArgumentException("На счету отправителя недостаточно средств.");
+            throw new TransactionException("На счету отправителя недостаточно средств.");
         }
 
         Currency fromCurrency = fromAccount.getCurrency();
@@ -148,28 +149,28 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void deposit(int userId, int accountId, double amount) {
         if (userId <= 0) {
-            throw new IllegalArgumentException("Идентификатор пользователя должен быть положительным числом.");
+            throw new TransactionException("Идентификатор пользователя должен быть положительным числом.");
         }
 
         if (accountId <= 0) {
-            throw new IllegalArgumentException("Идентификатор счета должен быть положительным числом.");
+            throw new TransactionException("Идентификатор счета должен быть положительным числом.");
         }
 
         if (!userRepo.existsById(userId)) {
-            throw new IllegalArgumentException("Пользователь с указанным идентификатором не существует.");
+            throw new TransactionException("Пользователь с указанным идентификатором не существует.");
         }
 
         Account account = accountRepo.getAccountById(accountId);
 
         if (account == null) {
-            throw new IllegalArgumentException("Счет с указанным идентификатором не найден.");
+            throw new TransactionException("Счет с указанным идентификатором не найден.");
         }
         if (account.getUserId() != userId) {
-            throw new IllegalArgumentException("Счет с ID " + accountId + " не принадлежит пользователю с ID " + userId);
+            throw new TransactionException("Счет с ID " + accountId + " не принадлежит пользователю с ID " + userId);
         }
 
         if (amount <= 0) {
-            throw new IllegalArgumentException("Сумма пополнения должна быть больше нуля.");
+            throw new TransactionException("Сумма пополнения должна быть больше нуля.");
         }
 
         Currency accountFromCurrency = account.getCurrency();
@@ -201,32 +202,32 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void withdraw(int userId, int accountId, double amount) {
         if (userId <= 0) {
-            throw new IllegalArgumentException("Идентификатор пользователя должен быть положительным числом.");
+            throw new TransactionException("Идентификатор пользователя должен быть положительным числом.");
         }
         if (!userRepo.existsById(userId)) {
-            throw new IllegalArgumentException("Пользователь с указанным идентификатором не существует.");
+            throw new TransactionException("Пользователь с указанным идентификатором не существует.");
         }
         if (accountId <= 0) {
-            throw new IllegalArgumentException("Идентификатор счета должен быть положительным числом.");
+            throw new TransactionException("Идентификатор счета должен быть положительным числом.");
         }
         if (!accountRepo.existsById(accountId)) {
-            throw new IllegalArgumentException("Счет с указанным идентификатором не найден.");
+            throw new TransactionException("Счет с указанным идентификатором не найден.");
         }
 
         Account account = accountRepo.getAccountById(accountId);
         if (account == null) {
-            throw new IllegalArgumentException("Счет не существует.");
+            throw new TransactionException("Счет не существует.");
         }
         if (account.getUserId() != userId) {
-            throw new IllegalArgumentException("Счет с ID " + accountId + " не принадлежит пользователю с ID " + userId);
+            throw new TransactionException("Счет с ID " + accountId + " не принадлежит пользователю с ID " + userId);
         }
 
         if (amount <= 0) {
-            throw new IllegalArgumentException("Сумма снятия должна быть больше нуля.");
+            throw new TransactionException("Сумма снятия должна быть больше нуля.");
         }
 
         if (account.getBalance() < amount) {
-            throw new IllegalArgumentException("Недостаточно средств на счету.");
+            throw new TransactionException("Недостаточно средств на счету.");
         }
 
         Currency accountFromCurrency = account.getCurrency();
@@ -262,7 +263,7 @@ public class TransactionServiceImpl implements TransactionService {
         Account toAccount = accountRepo.getAccountById(toAccountId);
 
         if (fromAccount.getBalance() < amount) {
-            throw new IllegalArgumentException("Недостаточно средств на счете.");
+            throw new TransactionException("Недостаточно средств на счете.");
         }
 
         Currency fromCurrency = fromAccount.getCurrency();
