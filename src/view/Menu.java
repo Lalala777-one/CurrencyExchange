@@ -490,17 +490,22 @@ public class Menu {
                 return;
             }
 
-            // Показываем список счетов
-            System.out.println( "Ваши счета:");
-            for (int i = 0; i < userAccounts.size(); i++) {
-                Account account = userAccounts.get(i);
-                System.out.println((i + 1) + Color.YELLOW + ". Счет ID: " + Color.RESET + account.getId() + Color.YELLOW + ", Валюта: " + Color.RESET + account.getCurrency().getName());
-            }
+
+            boolean continueClosingAccounts = true;
 
             // Спросим пользователя, какой счет он хочет закрыть
-            while (true) {
-                System.out.println(Color.GREEN + "Введите номер счета, который вы хотите закрыть (или 0 для выхода):" + Color.RESET);
-                int choice = scanner.nextInt();
+            while (continueClosingAccounts) {
+                // Показываем список счетов
+                System.out.println( "Ваши счета:");
+                for (int i = 0; i < userAccounts.size(); i++) {
+                    Account account = userAccounts.get(i);
+                    System.out.println((i + 1) + Color.YELLOW + ". Счет ID: " + Color.RESET + account.getId() + Color.YELLOW +
+                            ", Валюта: " + Color.RESET + account.getCurrency().getName()
+                            + Color.YELLOW + ", Баланс: " + Color.RESET + account.getBalance());
+                }
+
+                System.out.println(Color.GREEN + "Введите номер счета, который вы хотите закрыть" + Color.RESET + " (или 0 для выхода):");
+                int choice = getIntInput();
                 scanner.nextLine(); // Читаем лишний символ после ввода числа
 
                 if (choice == 0) {
@@ -515,17 +520,38 @@ public class Menu {
 
                 Account selectedAccount = userAccounts.get(choice - 1);  // Выбираем счет по номеру
 
+                if (selectedAccount.getBalance() > 0) {
+                    System.out.println(Color.RED + "Ошибка:" + Color.RESET + " нельзя закрыть счет с ненулевым балансом.");
+                    continue; // Повторный запрос на выбор счета
+                }
+
                 // Попытка удалить выбранный счет
                 accountService.deleteAccount(currentUserId, selectedAccount.getId());
                 System.out.println("Счет с ID " + selectedAccount.getId() + " успешно закрыт.");
 
-                // Спросим пользователя, хочет ли он закрыть еще один счет
-                System.out.println(Color.GREEN + "Хотите ли вы закрыть еще один счет? (да/нет):" + Color.RESET);
-                String answer = scanner.nextLine().trim().toLowerCase();
+//                // Спросим пользователя, хочет ли он закрыть еще один счет
+//                System.out.println(Color.GREEN + "Хотите ли вы закрыть еще один счет?" + Color.RESET + " (да/нет):");
+//                String answer = scanner.nextLine().trim().toLowerCase();
+//
+//                if (!answer.equals("да")) {
+//                  //  System.out.println("Выход из меню закрытия счетов.");
+//                    break;  // Завершаем цикл, если пользователь не хочет закрывать еще один счет
+//                }
 
-                if (!answer.equals("да")) {
-                  //  System.out.println("Выход из меню закрытия счетов.");
-                    break;  // Завершаем цикл, если пользователь не хочет закрывать еще один счет
+                String answer;
+                boolean validAnswer = false;
+                while (!validAnswer) {
+                    System.out.println(Color.GREEN + "Хотите ли вы закрыть еще один счет?" + Color.RESET + " (да/нет):");
+                    answer = scanner.nextLine().trim().toLowerCase();
+
+                    if (answer.equals("да")) {
+                        validAnswer = true;  // Пользователь выбрал продолжить
+                    } else if (answer.equals("нет")) {
+                        validAnswer = true;  // Пользователь выбрал прекратить
+                        continueClosingAccounts = false; // Прерываем цикл, если пользователь не хочет продолжать
+                    } else {
+                        System.out.println(Color.RED + "Ошибка:" + Color.RESET + " Неверный ввод. Пожалуйста, введите 'да' или 'нет'.");
+                    }
                 }
             }
 
