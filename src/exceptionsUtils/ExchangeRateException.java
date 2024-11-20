@@ -12,18 +12,6 @@ public class ExchangeRateException extends Exception {
     public String getMessage() {
         return super.getMessage();
     }
-    // Исключение, когда валюта не найдена в системе
-    public static class CurrencyNotFoundException extends ExchangeRateException {
-        public CurrencyNotFoundException(String currencyCode) {
-            super("Валюта с кодом " + currencyCode + " не найдена.");
-        }
-    }
-
-    public static class ExchangeRateNotFoundException extends ExchangeRateException {
-        public ExchangeRateNotFoundException(String fromCurrencyCode, String toCurrencyCode) {
-            super("Курс обмена для валют " + fromCurrencyCode + " -> " + toCurrencyCode + " не найден.");
-        }
-    }
 }
 /*
   try {
