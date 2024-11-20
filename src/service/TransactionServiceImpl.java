@@ -28,7 +28,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void addTransaction(Transaction transaction) {
+    public void addTransaction(Transaction transaction) throws TransactionException{
         if (transaction == null) {
             throw new TransactionException("Транзакция не может быть null");
         }
@@ -74,7 +74,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> findTransactionsByUserId(int userId) {
+    public List<Transaction> findTransactionsByUserId(int userId) throws TransactionException{
         if (userId <= 0) {
             throw new TransactionException("Идентификатор пользователя должен быть положительным числом.");
         }
@@ -94,7 +94,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> findTransactionsByAccountId(int accountId) {
+    public List<Transaction> findTransactionsByAccountId(int accountId) throws TransactionException{
         if (accountId <= 0) {
             throw new TransactionException("Идентификатор аккаунта должен быть положительным числом.");
         }
@@ -115,7 +115,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     // предполагает, что счета принадлежат одному и тому же пользователю и занимается конкретно обменом валют.
     @Override
-    public void exchangeTransaction(int userId, int fromAccountId, int toAccountId, double amount) {
+    public void exchangeTransaction(int userId, int fromAccountId, int toAccountId, double amount) throws TransactionException{
         Account fromAccount = accountRepo.getAccountById(fromAccountId);
         Account toAccount = accountRepo.getAccountById(toAccountId);
 
@@ -147,7 +147,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void deposit(int userId, int accountId, double amount) {
+    public void deposit(int userId, int accountId, double amount) throws TransactionException{
         if (userId <= 0) {
             throw new TransactionException("Идентификатор пользователя должен быть положительным числом.");
         }
@@ -200,7 +200,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void withdraw(int userId, int accountId, double amount) {
+    public void withdraw(int userId, int accountId, double amount) throws TransactionException{
         if (userId <= 0) {
             throw new TransactionException("Идентификатор пользователя должен быть положительным числом.");
         }
@@ -258,7 +258,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     // может быть использован для любых переводов между счетами (не обязательно одним и тем же пользователем)
     @Override
-    public void transfer(int fromAccountId, int toAccountId, double amount)  {
+    public void transfer(int fromAccountId, int toAccountId, double amount) throws TransactionException{
         Account fromAccount = accountRepo.getAccountById(fromAccountId);
         Account toAccount = accountRepo.getAccountById(toAccountId);
 
