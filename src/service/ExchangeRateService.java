@@ -2,6 +2,9 @@ package service;
 
 import exceptionsUtils.ExchangeRateException;
 import model.Currency;
+import model.ExchangeRate;
+
+import java.util.Map;
 
 public interface ExchangeRateService {
 
@@ -14,4 +17,8 @@ public interface ExchangeRateService {
 
     // Конвертировать из одной валюты в другую  ??
     double convertCurrency(Currency fromCurrencyCode, Currency toCurrencyCode, double amount) throws ExchangeRateException;
+
+    // new -
+    Map<Currency, ExchangeRate> getAllExchangeRates();
+    // - new
 }
