@@ -31,11 +31,11 @@ public class CurrencyServiceImpl implements CurrencyService{
         if (currencyCode == null || currencyCode.isBlank()) {
             throw new CurrencyException("Код валюты не может быть пустым.");
         }
-        currencyRepo.getCurrencyByCode(currencyCode);
-        if (currencyRepo.getCurrencyByCode(currencyCode) == null) {
-            throw new CurrencyException("Валюта с кодом " + currencyCode + " найдена не найдена.");
+        Currency currency = currencyRepo.getCurrencyByCode(currencyCode);
+        if (currency == null) {
+            throw new CurrencyException("Валюта с кодом " + currencyCode + " не найдена.");
         }
-        return currencyRepo.getCurrencyByCode(currencyCode);
+        return currency;
     }
 
     @Override
