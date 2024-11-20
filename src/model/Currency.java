@@ -20,7 +20,7 @@ public class Currency {
     // todo проверить вывод
     @Override
     public String toString() {
-        return String.format("Валюта: %12s Код: %6s", name, code);
+        return String.format("%13s \t Код: %3s", name, code);
     }
 
     public String getName() {

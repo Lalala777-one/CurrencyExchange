@@ -6,7 +6,7 @@ import repository.CurrencyRepo;
 
 import java.util.List;
 
-public class CurrencyServiceImpl implements CurrencyService{
+public class CurrencyServiceImpl implements CurrencyService {
 
     private final CurrencyRepo currencyRepo;
 
@@ -15,7 +15,7 @@ public class CurrencyServiceImpl implements CurrencyService{
     }
 
     @Override
-    public void addCurrency(Currency currency) throws CurrencyException{
+    public void addCurrency(Currency currency) throws CurrencyException {
         if (currency == null || currency.getCode() == null || currency.getCode().isBlank()) {
             throw new CurrencyException("Валюта или ее код не могут быть пустыми.");
         }
@@ -27,7 +27,7 @@ public class CurrencyServiceImpl implements CurrencyService{
     }
 
     @Override
-    public Currency getCurrencyByCode(String currencyCode) throws CurrencyException{
+    public Currency getCurrencyByCode(String currencyCode) throws CurrencyException {
         if (currencyCode == null || currencyCode.isBlank()) {
             throw new CurrencyException("Код валюты не может быть пустым.");
         }
@@ -39,7 +39,11 @@ public class CurrencyServiceImpl implements CurrencyService{
     }
 
     @Override
-    public List<Currency> getAllCurrencies() {
-        return List.of();
+    public List<Currency> getAllCurrencies() throws CurrencyException {
+        List<Currency> currencies = currencyRepo.getAllCurrencies();
+        if (currencies.isEmpty()) {
+            throw new CurrencyException("Нет доступных валют.");
+        }
+        return currencies;
     }
 }
