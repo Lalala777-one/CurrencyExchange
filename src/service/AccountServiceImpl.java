@@ -7,7 +7,9 @@ import repository.AccountRepo;
 import repository.CurrencyRepo;
 import repository.UserRepo;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class AccountServiceImpl implements AccountService{
     private final AccountRepo accountRepo;
@@ -20,6 +22,22 @@ public class AccountServiceImpl implements AccountService{
         this.userRepo = userRepo;
     }
 
+    private Map<Integer, List<String>> accountHistoryMap = new HashMap<>();
+
+    @Override
+    public void addAccountHistory(int userId, String historyRecord) {
+        accountHistoryMap.computeIfAbsent(userId, k -> new ArrayList<>()).add(historyRecord);
+    }
+
+    @Override
+    public List<String> getAccountHistory(int userId) {
+        return accountHistoryMap.getOrDefault(userId, Collections.emptyList());
+    }
+
+    private String getCurrentTimestamp() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss (dd.MM.yy)");
+        return LocalDateTime.now().format(formatter);
+    }
 
     @Override
     public void createAccount(int userId, String currencyCode) throws AccountException {
@@ -36,6 +54,9 @@ public class AccountServiceImpl implements AccountService{
 
         Account newAccount = new Account(currency, userId);
         accountRepo.addAccount(newAccount);
+
+        String timestamp = getCurrentTimestamp();
+        addAccountHistory(userId, timestamp + " - Создан счет в валюте: " + currencyCode + ". ID счёта: " + newAccount.getId());
     }
 
     @Override

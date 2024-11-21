@@ -3,6 +3,7 @@ package service;
 import model.Transaction;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TransactionService {
     // управляет операциями (пополнение, снятие, обмен).
@@ -26,6 +27,8 @@ public interface TransactionService {
     void withdraw(int userId, int accountId, double amount);
 
     void transfer(int fromAccountId, int toAccountId, double amount);
+
+    Map<Integer, Transaction> findAllTransactions();
 }
 
 
