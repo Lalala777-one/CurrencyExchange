@@ -46,4 +46,11 @@ public class AccountRepoImpl implements AccountRepo {
         mapAccounts.clear();
         System.out.println("Accounts cleared");
     }
+
+    private List<String> history = new ArrayList<>();
+
+    public List<String> getHistory() {
+        return history;
+    }
+
 }
