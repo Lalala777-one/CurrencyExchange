@@ -834,18 +834,16 @@ public class Menu {
     }
 
     public void addNewCurrency() {
-        // Проверяем, что текущий пользователь — администратор
         if (activeUser.getRole() != Role.ADMIN) {
             System.out.println(Color.RED + "Ошибка:" + Color.RESET + " у вас нет прав для доступа к данному меню.");
             return;
         }
 
-        // Спрашиваем код валюты первым
         String currencyCode = "";
         boolean validCode = false;
         while (!validCode) {
             System.out.print("Введите код валюты (например, USD, EUR): ");
-            currencyCode = scanner.nextLine().toUpperCase();  // Приводим к коду валюты в верхнем регистре
+            currencyCode = scanner.nextLine().toUpperCase();
             if (currencyCode.length() == 3) {
                 validCode = true;
             } else {
@@ -853,40 +851,45 @@ public class Menu {
             }
         }
 
-        // Проверяем, существует ли валюта с таким кодом
         try {
-            // Используем метод getCurrencyByCode для проверки, существует ли такая валюта
             Currency existingCurrency = currencyService.getCurrencyByCode(currencyCode);
             if (existingCurrency != null) {
-                // Если валюта с таким кодом уже существует, выводим сообщение
                 System.out.println(Color.RED + "Ошибка при добавлении валюты: Валюта с кодом " + currencyCode + " уже существует." + Color.RESET);
-                return;  // Возвращаемся в меню, не добавляя валюту
+                return;
             }
         } catch (CurrencyException e) {
-            // Валюта не найдена, это ожидаемое поведение, продолжаем добавление
+            // Валюта не найдена, продолжаем добавление
         }
 
-        // Запрашиваем название валюты
         System.out.print("Введите название валюты: ");
         String currencyName = scanner.nextLine();
 
-        // Запрашиваем курс валюты (опционально, можно добавить, если это требуется)
-        System.out.print("Введите курс валюты к основным валютам (например, 1.0 для базовой валюты): ");
-        double exchangeRate = scanner.nextDouble();
-        scanner.nextLine();  // Считываем лишний символ после ввода числа
+        double exchangeRate = 0.0;
+        boolean validRate = false;
+        while (!validRate) {
+            System.out.print("Введите курс валюты к основным валютам (например, 1.0 для базовой валюты): ");
+            String rateInput = scanner.nextLine().replace(",", ".");
+            try {
+                exchangeRate = Double.parseDouble(rateInput);
+                validRate = true;
+            } catch (NumberFormatException e) {
+                System.out.println(Color.RED + "Ошибка:" + Color.RESET + " Введите корректное число для курса валюты.");
+            }
+        }
 
-        // Создаем новую валюту
         Currency newCurrency = new Currency(currencyName, currencyCode);
 
         try {
-            // Попытка добавить валюту в систему
             currencyService.addCurrency(newCurrency);
             System.out.println(Color.GREEN + "Новая валюта " + currencyName + " с кодом " + currencyCode + " успешно добавлена!" + Color.RESET);
+
+            // Отображение обновленного списка валют
+            showAllCurrency();
         } catch (CurrencyException e) {
-            // Обработка исключений, если валюта не была добавлена (например, валюта с таким кодом уже существует)
             System.out.println(Color.RED + "Ошибка при добавлении валюты: " + e.getMessage() + Color.RESET);
         }
     }
+
 
     // В классе, где отображается меню администратора
     public void removeCurrencyFromMenu() {
@@ -902,6 +905,7 @@ public class Menu {
         try {
             // Вызываем сервис для удаления валюты
             currencyService.removeCurrency(currencyCode);
+            showAllCurrency();
         } catch (CurrencyException e) {
             System.out.println(Color.RED + "Ошибка: " + e.getMessage() + Color.RESET);
         }
