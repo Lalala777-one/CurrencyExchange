@@ -2,6 +2,7 @@ package repository;
 
 import model.Account;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface AccountRepo {
@@ -12,4 +13,5 @@ public interface AccountRepo {
 
     boolean existsById(int accountId);
     void clear();
+    List<String> history = new ArrayList<>();
 }

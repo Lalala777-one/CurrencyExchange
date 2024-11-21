@@ -4,6 +4,7 @@ import exceptionsUtils.AccountException;
 import model.Account;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AccountService { //  управление аккаунтами пользователей, созданием счетов, пополнением и снятием средств
 
@@ -25,4 +26,7 @@ public interface AccountService { //  управление аккаунтами 
     // Закрыть счет пользователя
     void deleteAccount(int userId, int accountId) throws AccountException;
 
+//    Map<Integer, List<String>> accountHistoryMap();
+    void addAccountHistory(int userId, String historyRecord);
+    List<String> getAccountHistory(int userId);
 }

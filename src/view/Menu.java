@@ -2,13 +2,14 @@ package view;
 
 import exceptionsUtils.*;
 import model.*;
+import model.Currency;
 import service.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Menu {
 
@@ -252,13 +253,13 @@ public class Menu {
                 System.out.println("5. Снять деньги со счета");
                 System.out.println("6. Закрыть счет");
                 System.out.println("7. Осуществить обмен валюты");
-                System.out.println("8. Посмотреть историю всех транзакций");
-                System.out.println("9. Перевести между своими счетами");
+                System.out.println("8. Перевести между своими счетами");
+                System.out.println("9. История аккаунта");
                 System.out.println("10. Logout");
 
                 System.out.println(Color.GREEN + "\n\033[3mСделайте ваш выбор:\033[0m");
 
-                int choice = scanner.nextInt();
+                int choice = getIntInput();
                 scanner.nextLine();
 
                 showUserSubMenu(choice);
@@ -297,11 +298,11 @@ public class Menu {
                 waitRead();
                 break;
             case 8:
-                showTransactionHistory();
+                transferBetweenAccounts();
                 waitRead();
                 break;
             case 9:
-                transferBetweenAccounts();
+                accountHistory();
                 waitRead();
                 break;
             case 10:
@@ -378,8 +379,11 @@ public class Menu {
         try {
             // снимаем средства с выбранного аккаунта
             accountService.withdraw(accountId, amount);
-            System.out.println( Color.YELLOW + "Счет успешно обновлен: " + Color.RESET +  "сумма снята: " + amount);
 
+            String timestamp = getCurrentTimestamp();
+            accountService.addAccountHistory(currentUserId, timestamp + " - Снятие со счета ID " + accountId + ": -" + amount);
+
+            System.out.println( Color.YELLOW + "Счет успешно обновлен: " + Color.RESET +  "сумма снята: " + amount);
             // Обновляем баланс выбранного аккаунта
             Account updatedAccount = accountService.getAccountById(accountId);
             System.out.println(Color.YELLOW + "Ваш обновленный баланс для аккаунта ID " + Color.RESET + updatedAccount.getId() + ": " + updatedAccount.getBalance());
@@ -458,8 +462,11 @@ public class Menu {
         try {
             // Вызов сервиса для пополнения счета
             accountService.deposit(accountId, amount);
-            System.out.println(Color.YELLOW + "Счет успешно пополнен на сумму: " + Color.RESET + amount);
 
+            String timestamp = getCurrentTimestamp();
+            accountService.addAccountHistory(currentUserId, timestamp + " - Пополнение счета ID " + accountId + ": +" + amount);
+
+            System.out.println(Color.YELLOW + "Счет успешно пополнен на сумму: " + Color.RESET + amount);
             // Обновляем баланс выбранного аккаунта
             Account updatedAccount = accountService.getAccountById(accountId);
             System.out.println(Color.YELLOW + "Ваш обновленный баланс для аккаунта ID " + Color.RESET  + updatedAccount.getId() + ": " + updatedAccount.getBalance());
@@ -496,9 +503,10 @@ public class Menu {
             // Спросим пользователя, какой счет он хочет закрыть
             while (continueClosingAccounts) {
                 // Показываем список счетов
-                System.out.println( "Ваши счета:");
+                System.out.println("Ваши счета:");
+                Account account = null;
                 for (int i = 0; i < userAccounts.size(); i++) {
-                    Account account = userAccounts.get(i);
+                    account = userAccounts.get(i);
                     System.out.println((i + 1) + Color.YELLOW + ". Счет ID: " + Color.RESET + account.getId() + Color.YELLOW +
                             ", Валюта: " + Color.RESET + account.getCurrency().getName()
                             + Color.YELLOW + ", Баланс: " + Color.RESET + account.getBalance());
@@ -509,7 +517,7 @@ public class Menu {
                 scanner.nextLine(); // Читаем лишний символ после ввода числа
 
                 if (choice == 0) {
-                   // System.out.println("Выход из меню закрытия счетов.");
+                    // System.out.println("Выход из меню закрытия счетов.");
                     return; // Выход из метода
                 }
 
@@ -527,7 +535,10 @@ public class Menu {
 
                 // Попытка удалить выбранный счет
                 accountService.deleteAccount(currentUserId, selectedAccount.getId());
-                System.out.println("Счет с ID " + selectedAccount.getId() + " успешно закрыт.");
+
+                String timestamp = getCurrentTimestamp();
+                accountService.addAccountHistory(currentUserId, timestamp +
+                        " - Счет с ID " + selectedAccount.getId() + " успешно закрыт.");
 
 //                // Спросим пользователя, хочет ли он закрыть еще один счет
 //                System.out.println(Color.GREEN + "Хотите ли вы закрыть еще один счет?" + Color.RESET + " (да/нет):");
@@ -1060,12 +1071,194 @@ public class Menu {
         }
     }
 
+    public void accountHistory() {
+        while (true) {
+            System.out.println(Color.YELLOW + "\033[1mИстория аккаунтов!\033[0m" + Color.RESET);
+            System.out.println("1. Вся история аккаунтов");
+            System.out.println("2. Найти историю аккаунта по ID");
+            System.out.println("3. Поиск истории аккаунтов по времени");
+            System.out.println("4. Посмотреть историю всех транзакций");
+            System.out.println("0. Выход");
 
-    private void validateAccountChoice(int index, int size) {
-        if (index < 0 || index >= size) {
-            throw new IllegalArgumentException("Неверный выбор счета.");
+            if (!scanner.hasNextInt()) {
+                System.out.println(Color.RED + "Ошибка ввода: " + Color.RESET + "пожалуйста, введите число.");
+                scanner.nextLine(); // Пропускаем некорректный ввод
+                continue;
+            }
+
+            int input = scanner.nextInt();
+            scanner.nextLine(); // Очищаем ввод
+
+            switch (input) {
+                case 1:
+                    allAccountsHistory();
+                    waitRead();
+                    break;
+                case 2:
+                    findHistoryByAccountID();
+                    waitRead();
+                    break;
+                case 3:
+                    findHistoryFlexible();
+                    waitRead();
+                    break;
+                case 4:
+                    showTransactionHistory();
+                    waitRead();
+                    break;
+                case 0:
+                    System.out.println(Color.GREEN + "Выход из меню истории аккаунтов." + Color.RESET);
+                    return;
+                default:
+                    System.out.println(Color.RED + "Неверный выбор. Попробуйте снова." + Color.RESET);
+            }
         }
     }
+
+    public void allAccountsHistory() {
+        System.out.println(Color.GREEN + "Вывод всей истории аккаунтов..." + Color.RESET);
+        List<String> history = accountService.getAccountHistory(currentUserId);
+
+        if (history.isEmpty()) {
+            System.out.println(Color.YELLOW + "История аккаунтов пуста." + Color.RESET);
+        } else {
+            history.forEach(System.out::println);
+        }
+    }
+
+
+    public void findHistoryByAccountID() {
+        System.out.println(Color.GREEN + "Введите ID аккаунта для поиска его истории:" + Color.RESET);
+
+        try {
+            List<Account> userAccounts = accountService.getAllAccountsByUserId(currentUserId);
+
+            if (userAccounts.isEmpty()) {
+                System.out.println(Color.YELLOW + "У вас нет доступных аккаунтов." + Color.RESET);
+                return;
+            }
+
+            System.out.print(Color.YELLOW + "Доступные ID аккаунтов: " + Color.RESET);
+            System.out.println(userAccounts.stream()
+                    .map(account -> String.valueOf(account.getId())) // Перетворюємо ID в String
+                    .reduce((id1, id2) -> id1 + ", " + id2) // Об'єднуємо в рядок через кому
+                    .orElse("нет доступных ID")); // На випадок пустого списку (хоча неактуально тут)
+
+            if (!scanner.hasNextInt()) {
+                System.out.println(Color.RED + "Ошибка ввода: " + Color.RESET + "пожалуйста, введите корректный ID.");
+                scanner.nextLine();
+                return;
+            }
+
+            int accountId = scanner.nextInt();
+            scanner.nextLine();
+
+            if (userAccounts.stream().noneMatch(account -> account.getId() == accountId)) {
+                System.out.println(Color.RED + "Ошибка: " + Color.RESET + "у вас нет аккаунта с таким ID.");
+                return;
+            }
+
+            List<String> accountHistory = accountService.getAccountHistory(currentUserId);
+
+            List<String> filteredHistory = accountHistory.stream()
+                    .filter(record -> record.contains("ID " + accountId)) // Шукаємо записи з ID
+                    .toList();
+
+            if (filteredHistory.isEmpty()) {
+                System.out.println(Color.YELLOW + "Для аккаунта с ID " + accountId + " история отсутствует." + Color.RESET);
+            } else {
+                System.out.println(Color.GREEN + "История аккаунта с ID " + accountId + ":" + Color.RESET);
+                filteredHistory.forEach(System.out::println);
+            }
+        } catch (AccountException e) {
+            System.out.println(Color.RED + "Ошибка: " + Color.RESET + e.getMessage());
+        }
+    }
+
+    public void findHistoryFlexible() {
+        System.out.println(Color.GREEN + "Введите временной диапазон " + Color.RESET + "(например: 'HH', 'HH:mm', 'dd.MM.yy' или полный формат 'HH:mm:ss (dd.MM.yy)'):");
+
+        String startTimeInput = scanner.nextLine().trim();
+        System.out.println(Color.GREEN + "Введите конечный временной диапазон "  + Color.RESET + "(оставьте пустым для поиска только по первому параметру):");
+        String endTimeInput = scanner.nextLine().trim();
+
+        try {
+            // Отримуємо історію для користувача
+            List<String> accountHistory = accountService.getAccountHistory(currentUserId);
+
+            // Фільтруємо записи за введеними умовами
+            List<String> filteredHistory = accountHistory.stream()
+                    .filter(record -> matchesFlexible(record, startTimeInput, endTimeInput))
+                    .toList();
+
+            // Виводимо результати
+            if (filteredHistory.isEmpty()) {
+                System.out.println(Color.YELLOW + "Нет записей, соответствующих вашему запросу." + Color.RESET);
+            } else {
+                System.out.println(Color.GREEN + "Записи, соответствующие вашему запросу:" + Color.RESET);
+                filteredHistory.forEach(System.out::println);
+            }
+
+        } catch (Exception e) {
+            System.out.println(Color.RED + "Ошибка: " + Color.RESET + "Некорректный формат ввода. Попробуйте снова.");
+        }
+    }
+
+    // Метод для перевірки відповідності запису умовам
+    private boolean matchesFlexible(String record, String startInput, String endInput) {
+        try {
+            // Розбираємо запис на частину з датою
+            LocalDateTime timestamp = parseTimestamp(record);
+
+            // Створюємо порівняльні межі для фільтрації
+            LocalDateTime startTime = buildFlexibleDateTime(startInput, true);
+            LocalDateTime endTime = buildFlexibleDateTime(endInput.isEmpty() ? startInput : endInput, false);
+
+            return (timestamp.isAfter(startTime) || timestamp.isEqual(startTime)) &&
+                    (timestamp.isBefore(endTime) || timestamp.isEqual(endTime));
+        } catch (Exception e) {
+            return false; // Якщо формат запису не відповідає - пропускаємо
+        }
+    }
+
+    // Метод для побудови дати на основі гнучкого введення
+    private LocalDateTime buildFlexibleDateTime(String input, boolean isStart) {
+        LocalDateTime now = LocalDateTime.now(); // Для заповнення відсутніх частин
+
+        if (input.matches("\\d{2}")) { // Формат 'HH'
+            return LocalDateTime.of(now.toLocalDate(), LocalTime.of(Integer.parseInt(input), isStart ? 0 : 59, isStart ? 0 : 59));
+        } else if (input.matches("\\d{2}:\\d{2}")) { // Формат 'HH:mm'
+            String[] parts = input.split(":");
+            return LocalDateTime.of(now.toLocalDate(), LocalTime.of(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), isStart ? 0 : 59));
+        } else if (input.matches("\\d{2}\\.\\d{2}\\.\\d{2}")) { // Формат 'dd.MM.yy'
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yy");
+            LocalDate date = LocalDate.parse(input, dateFormatter);
+            return LocalDateTime.of(date, isStart ? LocalTime.MIN : LocalTime.MAX);
+        } else if (input.matches("\\d{2}:\\d{2}:\\d{2} \\(\\d{2}\\.\\d{2}\\.\\d{2}\\)")) { // Формат 'HH:mm:ss (dd.MM.yy)'
+            DateTimeFormatter fullFormatter = DateTimeFormatter.ofPattern("HH:mm:ss (dd.MM.yy)");
+            return LocalDateTime.parse(input, fullFormatter);
+        }
+
+        throw new IllegalArgumentException("Неподдерживаемый формат времени: " + input);
+    }
+
+
+    private LocalDateTime parseTimestamp(String record) {
+        try {
+            String timestampPart = record.split(" - ")[0];
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss (dd.MM.yy)");
+            return LocalDateTime.parse(timestampPart, formatter);
+        } catch (Exception e) {
+            throw new RuntimeException("Неверный формат времени в записи: " + record, e);
+        }
+    }
+
+
+    public String getCurrentTimestamp() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss (dd.MM.yy)");
+        return LocalDateTime.now().format(formatter);
+    }
+
 
     private void waitRead() {
         System.out.println(Color.CYAN + "\nНажмите Enter для продолжения" + Color.RESET);
