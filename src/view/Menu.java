@@ -100,7 +100,7 @@ public class Menu {
         // Запрос валюты, из которой будем конвертировать
         Currency selectedCurrency = null;
         while (selectedCurrency == null) {
-            System.out.print("Введите код валюты для конвертации из (например, EUR, USD, SEK): ");
+            System.out.print(Color.GREEN + "Введите код валюты для конвертации из " + Color.RESET + "(например, EUR, USD, SEK): ");
             String fromCurrencyCode = scanner.nextLine().toUpperCase();
 
             // Получаем валюту по коду
@@ -135,7 +135,7 @@ public class Menu {
         // Запрос валюты, в которую будем конвертировать
         Currency selectedCurrency = null;
         while (selectedCurrency == null) {
-            System.out.print("Введите код валюты для конвертации в (например, EUR, USD, SEK): ");
+            System.out.print(Color.GREEN + "Введите код валюты для конвертации в " + Color.RESET + "(например, EUR, USD, SEK): ");
             String toCurrencyCode = scanner.nextLine().toUpperCase();
 
             // Проверяем, что это не та же валюта, из которой мы конвертируем
@@ -332,7 +332,7 @@ public class Menu {
         }
 
         // Выводим все аккаунты
-        System.out.println("Ваши доступные аккаунты:");
+        System.out.println(Color.YELLOW + "Ваши доступные аккаунты:" + Color.RESET);
         for (int i = 0; i < accounts.size(); i++) {
             Account account = accounts.get(i);
             System.out.println((i + 1) + ". ID: " + account.getId() + ", (" + account.getCurrency().getCode() + ") , Баланс: " + account.getBalance());
@@ -342,7 +342,7 @@ public class Menu {
         int accountId = 0;
         boolean validAccountId = false;
         while (!validAccountId) {
-            System.out.print("Введите номер аккаунта для снятия средств (например, 1): ");
+            System.out.print(Color.GREEN + "Введите номер аккаунта для снятия средств" + Color.RESET + " (например, 1): ");
             if (scanner.hasNextInt()) {
                 int accountIndex = scanner.nextInt() - 1;
                 if (accountIndex >= 0 && accountIndex < accounts.size()) {
@@ -365,7 +365,7 @@ public class Menu {
             if (scanner.hasNextDouble()) {
                 amount = scanner.nextDouble();
                 if (amount <= 0) {
-                    System.out.println("Сумма снятия должна быть больше нуля.");
+                    System.out.println(Color.RED + "Сумма снятия должна быть больше нуля." + Color.RESET);
                 } else {
                     validAmount = true;
                 }
@@ -378,14 +378,14 @@ public class Menu {
         try {
             // снимаем средства с выбранного аккаунта
             accountService.withdraw(accountId, amount);
-            System.out.println("Счет успешно обновлен: сумма снята: " + amount);
+            System.out.println( Color.YELLOW + "Счет успешно обновлен: " + Color.RESET +  "сумма снята: " + amount);
 
             // Обновляем баланс выбранного аккаунта
             Account updatedAccount = accountService.getAccountById(accountId);
-            System.out.println("Ваш обновленный баланс для аккаунта ID " + updatedAccount.getId() + ": " + updatedAccount.getBalance());
+            System.out.println(Color.YELLOW + "Ваш обновленный баланс для аккаунта ID " + Color.RESET + updatedAccount.getId() + ": " + updatedAccount.getBalance());
 
         } catch (AccountException e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println(Color.RED + "Ошибка: " + Color.RESET + e.getMessage());
         }
         System.out.println(" ");
         //System.out.println(Color.GREEN + "\nНажмите Enter для возвращения в меню..." + Color.RESET);
@@ -466,7 +466,7 @@ public class Menu {
 
         } catch (AccountException e) {
 
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println(Color.RED + "Ошибка: " + Color.RESET + e.getMessage());
         }
         System.out.println(" ");
         //System.out.println(Color.GREEN + "\nНажмите Enter для возвращения в меню..." + Color.RESET);
@@ -477,7 +477,7 @@ public class Menu {
 
     public void closeAccount() {
         if (currentUserId == 0) {
-            System.out.println("Ошибка: пользователь не авторизован.");
+            System.out.println(Color.RED + "Ошибка: " + Color.RESET + "пользователь не авторизован.");
             return;
         }
 
@@ -558,7 +558,7 @@ public class Menu {
         } catch (AccountException e) {
             System.out.println(Color.RED + "Ошибка при закрытии счета: " + Color.RESET + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Произошла непредвиденная ошибка: " + e.getMessage());
+            System.out.println(Color.RED + "Произошла непредвиденная ошибка: " + Color.RESET + e.getMessage());
         }
     }  // closeAccount()
 
@@ -695,7 +695,7 @@ public class Menu {
             System.err.println("Ошибка при получении списка аккаунтов: " + e.getMessage());
         } catch (Exception e) {
             // Обработка других неожиданных исключений
-            System.err.println("Произошла непредвиденная ошибка: " + e.getMessage());
+            System.err.println(Color.RED + "Произошла непредвиденная ошибка: " + Color.RESET + e.getMessage());
         }
     }
 
@@ -953,21 +953,21 @@ public class Menu {
             e.printStackTrace();  // Додати стек-трейс для детальної діагностики
         }
 
-        System.out.println(Color.BLUE + "\n0. Вернуться в предыдущее меню" + Color.RESET);
-        System.out.println(Color.GREEN + "\nСделать выбор:" + Color.RESET);
-
-        // Перевірка вводу користувача
-        int input = -1;
-        try {
-            input = scanner.nextInt();
-        } catch (InputMismatchException e) {
-            System.out.println(Color.RED + "Некоректний ввід. Будь ласка, введіть число." + Color.RESET);
-            scanner.nextLine();  // Очищаємо буфер
-        }
-
-        if (input == 0) {
-            return;
-        }
+//        System.out.println(Color.BLUE + "\n0. Вернуться в предыдущее меню" + Color.RESET);
+//        System.out.println(Color.GREEN + "\nСделать выбор:" + Color.RESET);
+//
+//        // Перевірка вводу користувача
+//        int input = -1;
+//        try {
+//            input = scanner.nextInt();
+//        } catch (InputMismatchException e) {
+//            System.out.println(Color.RED + "Некоректний ввід. Будь ласка, введіть число." + Color.RESET);
+//            scanner.nextLine();  // Очищаємо буфер
+//        }
+//
+//        if (input == 0) {
+//            return;
+//        }
     }
 
 
@@ -989,30 +989,63 @@ public class Menu {
                         userAccounts.get(i).getCurrency().getCode());
             }
 
-            System.out.println(Color.GREEN + "Выберите счет для отправки средств (номер):" + Color.RESET);
-            int fromIndex = scanner.nextInt() - 1;
-            validateAccountChoice(fromIndex, userAccounts.size());
+            // Выбор счета для отправки средств
+            int fromIndex = -1;
+            while (fromIndex < 0 || fromIndex >= userAccounts.size()) {
+                System.out.println(Color.GREEN + "Выберите счет для отправки средств "  + Color.RESET + " (номер):");
+                if (scanner.hasNextInt()) {
+                    fromIndex = scanner.nextInt() - 1;
+                    if (fromIndex < 0 || fromIndex >= userAccounts.size()) {
+                        System.out.println(Color.RED + "Неверный номер счета, попробуйте снова." + Color.RESET);
+                    }
+                } else {
+                    System.out.println(Color.RED + "Введено не число, попробуйте снова." + Color.RESET);
+                    scanner.next(); // Очистка буфера
+                }
+            }
 
             Account fromAccount = userAccounts.get(fromIndex);
 
-            System.out.println(Color.GREEN + "Выберите счет для получения средств (номер):" + Color.RESET);
-            int toIndex = scanner.nextInt() - 1;
-            validateAccountChoice(toIndex, userAccounts.size());
-
-            if (fromIndex == toIndex) {
-                throw new IllegalArgumentException("Нельзя переводить средства на тот же счет.");
+            // Выбор счета для получения средств
+            int toIndex = -1;
+            while (toIndex < 0 || toIndex >= userAccounts.size()) {
+                System.out.println(Color.GREEN + "Выберите счет для получения средств "  + Color.RESET + " (номер):");
+                if (scanner.hasNextInt()) {
+                    toIndex = scanner.nextInt() - 1;
+                    if (toIndex == fromIndex) {
+                        System.out.println(Color.RED + "Нельзя переводить средства на тот же счет, попробуйте снова." + Color.RESET);
+                        toIndex = -1; // Сбросить выбор
+                    } else if (toIndex < 0 || toIndex >= userAccounts.size()) {
+                        System.out.println(Color.RED + "Неверный номер счета, попробуйте снова." + Color.RESET);
+                    }
+                } else {
+                    System.out.println(Color.RED + "Введено не число, попробуйте снова." + Color.RESET);
+                    scanner.next(); // Очистка буфера
+                }
             }
 
             Account toAccount = userAccounts.get(toIndex);
 
-            System.out.println(Color.GREEN + "Введите сумму для перевода:" + Color.RESET);
-            double amount = scanner.nextDouble();
-            if (amount <= 0 || amount > fromAccount.getBalance()) {
-                throw new IllegalArgumentException("Недостаточно средств или неверная сумма.");
+            // Ввод суммы для перевода
+            double amount = -1;
+            while (amount <= 0 || amount > fromAccount.getBalance()) {
+                System.out.println(Color.GREEN + "Введите сумму для перевода:" + Color.RESET);
+                if (scanner.hasNextDouble()) {
+                    amount = scanner.nextDouble();
+                    if (amount <= 0) {
+                        System.out.println(Color.RED + "Сумма должна быть больше нуля, попробуйте снова." + Color.RESET);
+                    } else if (amount > fromAccount.getBalance()) {
+                        System.out.println(Color.RED + "Недостаточно средств на счете, попробуйте снова." + Color.RESET);
+                    }
+                } else {
+                    System.out.println(Color.RED + "Введено не число, попробуйте снова." + Color.RESET);
+                    scanner.next(); // Очистка буфера
+                }
             }
 
             transactionService.transfer(fromAccount.getId(), toAccount.getId(), amount);
-            System.out.println(Color.GREEN + "Перевод успешно выполнен!" + Color.RESET);
+            System.out.println(Color.YELLOW + "Перевод успешно выполнен!" + Color.RESET);
+            scanner.nextLine();
 
             System.out.println(Color.BLUE + "\nВаши счета:" + Color.RESET);
             for (int i = 0; i < userAccounts.size(); i++) {
@@ -1026,6 +1059,7 @@ public class Menu {
             System.out.println(Color.RED + "Ошибка при выполнении перевода: " + e.getMessage() + Color.RESET);
         }
     }
+
 
     private void validateAccountChoice(int index, int size) {
         if (index < 0 || index >= size) {
