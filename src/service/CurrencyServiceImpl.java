@@ -58,4 +58,23 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
         currencyRepo.removeCurrency(currencyCode); // Удаляем валюту из репозитория
     }
+
+    @Override
+    public boolean isValidCurrencyCode(String currencyCode) {
+        // Список официальных трехбуквенных кодов валют (например, ISO 4217)
+        String[] validCurrencyCodes = {
+                "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "SEK", "NOK", "MXN",
+                "CNY", "INR", "RUB", "NZD", "HKD", "SGD", "BRL", "ZAR"
+        };
+
+        // Перебираем все допустимые коды и проверяем, есть ли совпадение с введенным
+        for (String validCode : validCurrencyCodes) {
+            if (validCode.equalsIgnoreCase(currencyCode)) {
+                return true;  // Код валюты найден в списке
+            }
+        }
+
+        return false;  // Код не найден в списке
+    }
+
 }
