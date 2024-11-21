@@ -746,13 +746,11 @@ public class Menu {
                 waitRead();
                 break;
             case 3:
-                // Todo
-               // addNewCurrency();
+                addNewCurrency();
                 waitRead();
                 break;
             case 4:
-                // Todo
-                // method
+                removeCurrencyFromMenu();
                 waitRead();
                 break;
             case 5:
@@ -762,6 +760,7 @@ public class Menu {
                 System.out.println(Color.GREEN + "\033[3mСделайте корректный выбор\033[0m\n" + Color.RESET);
         }
     }
+
 
 
     // МЕТОДЫ
@@ -1263,6 +1262,86 @@ public class Menu {
     private void waitRead() {
         System.out.println(Color.CYAN + "\nНажмите Enter для продолжения" + Color.RESET);
         scanner.nextLine();
+    }
+
+
+    public void addNewCurrency() {
+        if (activeUser.getRole() != Role.ADMIN) {
+            System.out.println(Color.RED + "Ошибка:" + Color.RESET + " у вас нет прав для доступа к данному меню.");
+            return;
+        }
+
+        String currencyCode = "";
+        boolean validCode = false;
+        while (!validCode) {
+            System.out.print("Введите код валюты (например, USD, EUR): ");
+            currencyCode = scanner.nextLine().toUpperCase();
+            if (currencyCode.length() == 3) {
+                validCode = true;
+            } else {
+                System.out.println(Color.RED + "Ошибка:" + Color.RESET + " Код валюты должен состоять из 3 символов.");
+            }
+        }
+
+        try {
+            Currency existingCurrency = currencyService.getCurrencyByCode(currencyCode);
+            if (existingCurrency != null) {
+                System.out.println(Color.RED + "Ошибка при добавлении валюты: Валюта с кодом " + currencyCode + " уже существует." + Color.RESET);
+                return;
+            }
+        } catch (CurrencyException e) {
+            // Валюта не найдена, продолжаем добавление
+        }
+
+        System.out.print("Введите название валюты: ");
+        String currencyName = scanner.nextLine();
+
+        double exchangeRate = 0.0;
+        boolean validRate = false;
+        while (!validRate) {
+            System.out.print("Введите курс валюты к основным валютам (например, 1.0 для базовой валюты): ");
+            String rateInput = scanner.nextLine().replace(",", ".");
+            try {
+                exchangeRate = Double.parseDouble(rateInput);
+                validRate = true;
+            } catch (NumberFormatException e) {
+                System.out.println(Color.RED + "Ошибка:" + Color.RESET + " Введите корректное число для курса валюты.");
+            }
+        }
+
+        Currency newCurrency = new Currency(currencyName, currencyCode);
+
+        try {
+            currencyService.addCurrency(newCurrency);
+            System.out.println(Color.GREEN + "Новая валюта " + currencyName + " с кодом " + currencyCode + " успешно добавлена!" + Color.RESET);
+
+            // Отображение обновленного списка валют
+            showAllCurrency();
+        } catch (CurrencyException e) {
+            System.out.println(Color.RED + "Ошибка при добавлении валюты: " + e.getMessage() + Color.RESET);
+        }
+    }
+
+
+    // В классе, где отображается меню администратора
+    public void removeCurrencyFromMenu() {
+        if (activeUser.getRole() != Role.ADMIN) {
+            System.out.println(Color.RED + "Ошибка:" + Color.RESET + " у вас нет прав для доступа к данному меню.");
+            return;
+        }
+
+        // Запрашиваем код валюты для удаления
+        System.out.print("Введите код валюты, которую хотите удалить (например, USD, EUR): ");
+        String currencyCode = scanner.nextLine().toUpperCase();  // Приводим код валюты к верхнему регистру
+
+        try {
+            // Вызываем сервис для удаления валюты
+            currencyService.removeCurrency(currencyCode);
+            showAllCurrency();
+        } catch (CurrencyException e) {
+            System.out.println(Color.RED + "Ошибка: " + e.getMessage() + Color.RESET);
+        }
+
     }
 
 }

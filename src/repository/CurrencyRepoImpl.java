@@ -1,6 +1,7 @@
 package repository;
 
 import model.Currency;
+import view.Color;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,15 @@ public class CurrencyRepoImpl implements CurrencyRepo {
         addCurrency(gbp);
         addCurrency(jpy);
         addCurrency(chf);
+    }
+    @Override
+    public void removeCurrency(String currencyCode) {
+        if (currencies.containsKey(currencyCode)) {
+            currencies.remove(currencyCode);
+            System.out.println("Валюта с кодом " + currencyCode + " успешно удалена.");
+        } else {
+            System.out.println(Color.RED + "Ошибка: Валюта с таким кодом не найдена." + Color.RESET);
+        }
     }
 
 }

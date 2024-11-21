@@ -46,4 +46,16 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
         return currencies;
     }
+
+    @Override
+    public void removeCurrency(String currencyCode) throws CurrencyException {
+        if (currencyCode == null || currencyCode.isBlank()) {
+            throw new CurrencyException("Код валюты не может быть пустым.");
+        }
+        Currency currency = currencyRepo.getCurrencyByCode(currencyCode);
+        if (currency == null) {
+            throw new CurrencyException("Валюта с кодом " + currencyCode + " не найдена.");
+        }
+        currencyRepo.removeCurrency(currencyCode); // Удаляем валюту из репозитория
+    }
 }
