@@ -19,4 +19,6 @@ public interface ExchangeRateService {
     double convertCurrency(Currency fromCurrencyCode, Currency toCurrencyCode, double amount) throws ExchangeRateException;
 
     Map<String, ExchangeRate> getAllExchangeMap();
+
+    void addExchangeRate(Currency fromCurrency, Currency toCurrency, double rate);
 }

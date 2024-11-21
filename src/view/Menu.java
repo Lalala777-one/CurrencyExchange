@@ -1338,6 +1338,8 @@ public class Menu {
         try {
             // Попытка добавить валюту в систему
             currencyService.addCurrency(newCurrency);
+            exchangeRateService.addExchangeRate(newCurrency, new Currency("Euro", "EUR"), exchangeRate); // new
+            exchangeRateService.addExchangeRate(new Currency("Euro", "EUR"), newCurrency, 1 / exchangeRate); // new
             System.out.println(Color.GREEN + "Новая валюта " + currencyName + " с кодом " + currencyCode + " успешно добавлена!" + Color.RESET);
 
             // Отображаем обновленный список валют
