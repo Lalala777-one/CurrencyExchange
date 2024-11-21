@@ -120,5 +120,12 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     public Map<String, ExchangeRate> getAllExchangeMap() {
         return exchangeRateRepo.getAllExchangeMap();
     }
+
+    @Override
+    public void addExchangeRate(Currency fromCurrency, Currency toCurrency, double rate) {
+        String key = fromCurrency.getCode() + "-" + toCurrency.getCode();
+        ExchangeRate exchangeRate = new ExchangeRate(rate, fromCurrency, toCurrency);
+        exchangeRateRepo.addExchangeRate(fromCurrency, toCurrency, rate);
+    }
 }
 
