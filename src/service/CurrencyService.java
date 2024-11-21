@@ -16,4 +16,5 @@ public interface CurrencyService {  // управление курсами ва�
     public void removeCurrency(String currencyCode) throws CurrencyException;
 
 
+    boolean isValidCurrencyCode(String currencyCode);
 }
