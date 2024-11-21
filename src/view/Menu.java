@@ -725,7 +725,7 @@ public class Menu {
                 System.out.println("5. Logout");
                 System.out.println(Color.GREEN + "\n\033[3mСделайте ваш выбор:\033[0m" + Color.RESET);
 
-                int choice = scanner.nextInt();
+                int choice = getIntInput();
                 scanner.nextLine();
 
                 showAdminSubMenu(choice);
@@ -1275,15 +1275,31 @@ public class Menu {
         // Спрашиваем код валюты первым
         String currencyCode = "";
         boolean validCode = false;
-        while (!validCode) {
-            System.out.print("Введите код валюты (например, USD, EUR): ");
+        int attemptCount = 0;
+        final int MAX_ATTEMPTS = 3; // Ограничиваем количество попыток ввода
+
+        while (!validCode && attemptCount < MAX_ATTEMPTS) {
+            System.out.print("Введите код валюты (например, USD, EUR) или введите '0' для выхода: ");
             currencyCode = scanner.nextLine().toUpperCase();  // Приводим к коду валюты в верхнем регистре
+
+            // Проверка на выход из процесса
+            if (currencyCode.equals("0")) {
+                System.out.println("Операция добавления валюты отменена.");
+                return;  // Завершаем метод и возвращаемся в меню
+            }
 
             // Проверяем, что код валюты состоит из 3 символов и является допустимым
             if (currencyCode.length() == 3 && currencyService.isValidCurrencyCode(currencyCode)) {
                 validCode = true;
             } else {
-                System.out.println(Color.RED + "Ошибка:" + Color.RESET + " Код валюты должен состоять из 3 символов и быть официальным кодом валюты.");
+                attemptCount++;
+                if (attemptCount < MAX_ATTEMPTS) {
+                    System.out.println(Color.RED + "Ошибка:" + Color.RESET + " Код валюты должен состоять из 3 символов и быть официальным кодом валюты.");
+                } else {
+                    System.out.println(Color.RED + "Ошибка:" + Color.RESET + " Превышено максимальное количество попыток.");
+                    System.out.println("Возвращаемся в меню...");
+                    return;  // Завершаем метод, если максимальное количество попыток исчерпано
+                }
             }
         }
 
