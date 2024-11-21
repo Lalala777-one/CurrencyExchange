@@ -685,12 +685,10 @@ public class Menu {
                 waitRead();
                 break;
             case 3:
-                // Todo
                 addNewCurrency();
                 waitRead();
                 break;
             case 4:
-                // Todo
                 removeCurrencyFromMenu();
                 waitRead();
                 break;
